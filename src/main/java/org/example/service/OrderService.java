@@ -11,48 +11,37 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class OrderService {
-    public List<Order> filterOrders(List<Order> orders, OrderStatus status, DateRange dateRange) {
-        return orders.stream()
-                .filter(order -> status == null || order.status() == status)
-                .filter(order -> {
-                    if (dateRange == null) return true;
-                    // Sử dụng Optional để xử lý an toàn trường hợp createdAt bị null
-                    return Optional.ofNullable(order.createdAt())
-                            .map(dt -> dateRange.includes(dt.toLocalDate()))
-                            .orElse(false);
-                })
-                .toList();
-    }
+    public double calculateRevenue(List<Order> orders, String statusInput, LocalDate startDate, LocalDate endDate) {
+        double totalRevenue = 0;
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            LocalDate orderDate = order.createdAt().toLocalDate();
 
-    /**
-     * 1. Tính tổng doanh thu theo từng Trạng thái (Compute revenue per status)
-     */
-    public Map<OrderStatus, Double> computeRevenuePerStatus(List<Order> orders) {
-        return orders.stream()
-                .collect(Collectors.groupingBy(
-                        Order::status,
-                        Collectors.summingDouble(Order::total)
-                ));
-    }
+            // 1. Kiểm tra Status: Nếu có nhập status và khác "ALL" thì mới lọc
+            if (statusInput != null && !statusInput.isEmpty() && !statusInput.equalsIgnoreCase("ALL")) {
+                if (!order.status().name().equalsIgnoreCase(statusInput)) {
+                    continue; // Không khớp status thì bỏ qua
+                }
+            }
 
-    /**
-     * 2. Tính tổng doanh thu theo từng Ngày (Compute revenue per day)
-     */
-    public Map<LocalDate, Double> computeRevenuePerDay(List<Order> orders) {
-        return orders.stream()
-                .filter(order -> order.createdAt() != null)
-                .collect(Collectors.groupingBy(
-                        order -> order.createdAt().toLocalDate(),
-                        Collectors.summingDouble(Order::total)
-                ));
-    }
+            // 2. Kiểm tra ngày bắt đầu: Nếu có nhập startDate thì mới lọc
+            if (startDate != null) {
+                if (orderDate.isBefore(startDate)) {
+                    continue; // Trước ngày bắt đầu thì bỏ qua
+                }
+            }
 
-    /**
-     * Tính tổng doanh thu của toàn bộ danh sách đơn hàng
-     */
-    public double calculateTotalRevenue(List<Order> orders) {
-        return orders.stream()
-                .mapToDouble(Order::total)
-                .sum();
+            // 3. Kiểm tra ngày kết thúc: Nếu có nhập endDate thì mới lọc
+            if (endDate != null) {
+                if (orderDate.isAfter(endDate)) {
+                    continue; // Sau ngày kết thúc thì bỏ qua
+                }
+            }
+
+            // Nếu vượt qua tất cả các bộ lọc ở trên thì cộng dồn tiền
+            totalRevenue += order.total();
+        }
+
+        return totalRevenue;
     }
 }

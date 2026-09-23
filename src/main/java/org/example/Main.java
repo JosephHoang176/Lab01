@@ -9,49 +9,67 @@ import org.example.service.OrderService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        JsonReader jsonReader = new JsonReader();
-        OrderService orderService = new OrderService();
+        JsonReader reader = new JsonReader();
+        List<Order> allOrders = reader.loadOrders("orders.json");
 
-        // 1. Đọc file JSON
-        List<Order> allOrders = jsonReader.loadOrders("orders.json");
+        OrderService service = new OrderService();
+        Scanner scanner = new Scanner(System.in);
 
-        // 2. Thiết lập bộ lọc (Ví dụ: Tháng 07/2026)
-        DateRange dateRange = new DateRange(
-                LocalDate.of(2026, 7, 1),
-                LocalDate.of(2026, 7, 31)
-        );
+        System.out.println("==========================================");
+        System.out.println("   HE THONG LOC VA TRA CUU THONG TIN DOANH THU  ");
+        System.out.println("==========================================");
 
-        List<Order> filteredOrders = orderService.filterOrders(allOrders, null, dateRange);
+        while (true) {
+            System.out.println("\n------------------------------------------");
+            System.out.println("( PRESS [Enter] BO QUA DE LAY TAT CA, HOAC gO EXIT DE THOAT)");
 
-        // --- BÁO CÁO (PRINT REPORT) ---
-        System.out.println("==================================================");
-        System.out.println("            ORDER SUMMARY REPORT                  ");
-        System.out.println("==================================================");
-        System.out.println("Total orders loaded: " + allOrders.size());
-        System.out.println("Filtered orders count: " + filteredOrders.size());
-        System.out.printf("Total Revenue: %,.0f VND\n", orderService.calculateTotalRevenue(filteredOrders));
-        System.out.println("--------------------------------------------------");
+            System.out.print("1. NHAP STATUS (CANCELLED, PAID, FULFILLED...): ");
+            String status = scanner.nextLine().trim();
 
-        // 3. Doanh thu theo Trạng thái (Compute revenue per status)
-        System.out.println("\n[ REVENUE PER STATUS ]");
-        Map<OrderStatus, Double> revenuePerStatus = orderService.computeRevenuePerStatus(filteredOrders);
-        revenuePerStatus.forEach((status, revenue) ->
-                System.out.printf(" - %-15s : %,15.0f VND\n", status, revenue)
-        );
+            if (status.equalsIgnoreCase("EXIT")) {
+                System.out.println("CAM ON BAN DA SU DUNG!");
+                break;
+            }
 
-        // 4. Doanh thu theo Ngày (Compute revenue per day)
-        System.out.println("\n[ REVENUE PER DAY ]");
-        Map<LocalDate, Double> revenuePerDay = orderService.computeRevenuePerDay(filteredOrders);
-        revenuePerDay.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()) // Sắp xếp theo thứ tự ngày tăng dần
-                .forEach(entry ->
-                        System.out.printf(" - %-15s : %,15.0f VND\n", entry.getKey(), entry.getValue())
-                );
+            System.out.print("2. NHAP NGAY BAT DAU (yyyy-MM-dd): ");
+            String startDateStr = scanner.nextLine().trim();
 
-        System.out.println("==================================================");
+            System.out.print("3. NHAP NGAY KET THUC (yyyy-MM-dd): ");
+            String endDateStr = scanner.nextLine().trim();
+
+            try {
+                // Nếu người dùng không nhập gì, chuyển thành null
+                LocalDate startDate = startDateStr.isEmpty() ? null : LocalDate.parse(startDateStr);
+                LocalDate endDate = endDateStr.isEmpty() ? null : LocalDate.parse(endDateStr);
+
+                // Tính toán doanh thu
+                double totalRevenue = service.calculateRevenue(allOrders, status, startDate, endDate);
+
+                // In kết quả hiển thị
+                String displayStatus = status.isEmpty() ? "TAT CA" : status.toUpperCase();
+                String displayFrom = (startDate == null) ? "" : startDate.toString();
+                String displayTo = (endDate == null) ? "" : endDate.toString();
+
+                System.out.println("\n---------------- KET QUA ----------------");
+                System.out.println("TRANG THAI LOC : " + displayStatus);
+                System.out.println("FROM        : " + displayFrom);
+                System.out.println("TO       : " + displayTo);
+                System.out.printf("REVENUE : %,.0f VND%n", totalRevenue);
+                System.out.println("-----------------------------------------");
+
+            } catch (Exception e) {
+                System.out.println("\n[ERR]: SAI DINH DANG THOI GIAN (yyyy-MM-dd, VD: 2026-07-09). VUI LONG THU LAI!");
+            }
+        }
+
+        scanner.close();
     }
 }
+
+
+
 
