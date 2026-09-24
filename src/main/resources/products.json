@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "sku": "PAP-001",
+    "name": "A4 Copy Paper 80gsm (ream)",
+    "category": "Paper & Printing",
+    "unitPrice": 72000,
+    "currency": "VND",
+    "stock": 56,
+    "isActive": true
+  },
+  {
+    "id": 2,
+    "sku": "PAP-002",
+    "name": "A3 Copy Paper 80gsm (ream)",
+    "category": "Paper & Printing",
+    "unitPrice": 145000,
+    "currency": "VND",
+    "stock": 147,
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "sku": "PAP-003",
+    "name": "Thermal Receipt Roll 80mm (box of 50)",
+    "category": "Paper & Printing",
+    "unitPrice": 390000,
+    "currency": "VND",
+    "stock": 50,
+    "isActive": true
+  },
+  {
+    "id": 4,
+    "sku": "PAP-004",
+    "name": "Laser Toner Cartridge Black",
+    "category": "Paper & Printing",
+    "unitPrice": 1250000,
+    "currency": "VND",
+    "stock": 230,
+    "isActive": true
+  },
+  {
+    "id": 5,
+    "sku": "PAP-005",
+    "name": "Inkjet Cartridge Colour Set",
+    "category": "Paper & Printing",
+    "unitPrice": 680000,
+    "currency": "VND",
+    "stock": 5,
+    "isActive": true
+  },
+  {
+    "id": 6,
+    "sku": "PAP-006",
+    "name": "Label Sheets A4 (pack of 100)",
+    "category": "Paper & Printing",
+    "unitPrice": 210000,
+    "currency": "VND",
+    "stock": 350,
+    "isActive": true
+  },
+  {
+    "id": 7,
+    "sku": "PAP-007",
+    "name": "Kraft Envelopes C4 (box of 250)",
+    "category": "Paper & Printing",
+    "unitPrice": 520000,
+    "currency": "VND",
+    "stock": 251,
+    "isActive": true
+  },
+  {
+    "id": 8,
+    "sku": "PAP-008",
+    "name": "Business Card Stock (pack of 250)",
+    "category": "Paper & Printing",
+    "unitPrice": 180000,
+    "currency": "VND",
+    "stock": 347,
+    "isActive": true
+  },
+  {
+    "id": 9,
+    "sku": "OFF-001",
+    "name": "Ballpoint Pens Blue (box of 50)",
+    "category": "Office Supplies",
+    "unitPrice": 125000,
+    "currency": "VND",
+    "stock": 160,
+    "isActive": true
+  },
+  {
+    "id": 10,
+    "sku": "OFF-002",
+    "name": "Whiteboard Markers (set of 4)",
+    "category": "Office Supplies",
+    "unitPrice": 48000,
+    "currency": "VND",
+    "stock": 107,
+    "isActive": true
+  },
+  {
+    "id": 11,
+    "sku": "OFF-003",
+    "name": "Stapler Heavy Duty",
+    "category": "Office Supplies",
+    "unitPrice": 265000,
+    "currency": "VND",
+    "stock": 203,
+    "isActive": true
+  },
+  {
+    "id": 12,
+    "sku": "OFF-004",
+    "name": "Staples 24/6 (box of 5000)",
+    "category": "Office Supplies",
+    "unitPrice": 22000,
+    "currency": "VND",
+    "stock": 128,
+    "isActive": true
+  },
+  {
+    "id": 13,
+    "sku": "OFF-005",
+    "name": "Lever Arch File A4",
+    "category": "Office Supplies",
+    "unitPrice": 38000,
+    "currency": "VND",
+    "stock": 178,
+    "isActive": true
+  },
+  {
+    "id": 14,
+    "sku": "OFF-006",
+    "name": "Sticky Notes 76x76 (pack of 12)",
+    "category": "Office Supplies",
+    "unitPrice": 96000,
+    "currency": "VND",
+    "stock": 182,
+    "isActive": true
+  },
+  {
+    "id": 15,
+    "sku": "OFF-007",
+    "name": "Desk Organiser Mesh",
+    "category": "Office Supplies",
+    "unitPrice": 155000,
+    "currency": "VND",
+    "stock": 192,
+    "isActive": true
+  },
+  {
+    "id": 16,
+    "sku": "OFF-008",
+    "name": "Scissors 21cm",
+    "category": "Office Supplies",
+    "unitPrice": 35000,
+    "currency": "VND",
+    "stock": 381,
+    "isActive": true
+  },
+  {
+    "id": 17,
+    "sku": "OFF-009",
+    "name": "Correction Tape (pack of 10)",
+    "category": "Office Supplies",
+    "unitPrice": 110000,
+    "currency": "VND",
+    "stock": 0,
+    "isActive": false
+  },
+  {
+    "id": 18,
+    "sku": "OFF-010",
+    "name": "Highlighters (set of 6)",
+    "category": "Office Supplies",
+    "unitPrice": 54000,
+    "currency": "VND",
+    "stock": 326,
+    "isActive": true
+  },
+  {
+    "id": 19,
+    "sku": "ELE-001",
+    "name": "Wireless Mouse",
+    "category": "Electronics",
+    "unitPrice": 245000,
+    "currency": "VND",
+    "stock": 39,
+    "isActive": true
+  },
+  {
+    "id": 20,
+    "sku": "ELE-002",
+    "name": "USB-C Hub 7-in-1",
+    "category": "Electronics",
+    "unitPrice": 690000,
+    "currency": "VND",
+    "stock": 370,
+    "isActive": true
+  },
+  {
+    "id": 21,
+    "sku": "ELE-003",
+    "name": "Mechanical Keyboard",
+    "category": "Electronics",
+    "unitPrice": 1450000,
+    "currency": "VND",
+    "stock": 174,
+    "isActive": true
+  },
+  {
+    "id": 22,
+    "sku": "ELE-004",
+    "name": "27-inch Monitor",
+    "category": "Electronics",
+    "unitPrice": 4890000,
+    "currency": "VND",
+    "stock": 45,
+    "isActive": true
+  },
+  {
+    "id": 23,
+    "sku": "ELE-005",
+    "name": "Webcam Full HD",
+    "category": "Electronics",
+    "unitPrice": 890000,
+    "currency": "VND",
+    "stock": 285,
+    "isActive": true
+  },
+  {
+    "id": 24,
+    "sku": "ELE-006",
+    "name": "Noise-cancelling Headset",
+    "category": "Electronics",
+    "unitPrice": 1650000,
+    "currency": "VND",
+    "stock": 275,
+    "isActive": true
+  },
+  {
+    "id": 25,
+    "sku": "ELE-007",
+    "name": "Portable SSD 1TB",
+    "category": "Electronics",
+    "unitPrice": 2150000,
+    "currency": "VND",
+    "stock": 149,
+    "isActive": true
+  },
+  {
+    "id": 26,
+    "sku": "ELE-008",
+    "name": "Barcode Scanner USB",
+    "category": "Electronics",
+    "unitPrice": 1180000,
+    "currency": "VND",
+    "stock": 0,
+    "isActive": false
+  },
+  {
+    "id": 27,
+    "sku": "ELE-009",
+    "name": "Label Printer Desktop",
+    "category": "Electronics",
+    "unitPrice": 3250000,
+    "currency": "VND",
+    "stock": 234,
+    "isActive": true
+  },
+  {
+    "id": 28,
+    "sku": "ELE-010",
+    "name": "Power Strip 6 Outlets",
+    "category": "Electronics",
+    "unitPrice": 185000,
+    "currency": "VND",
+    "stock": 72,
+    "isActive": true
+  },
+  {
+    "id": 29,
+    "sku": "FUR-001",
+    "name": "Ergonomic Office Chair",
+    "category": "Furniture",
+    "unitPrice": 3890000,
+    "currency": "VND",
+    "stock": 330,
+    "isActive": true
+  },
+  {
+    "id": 30,
+    "sku": "FUR-002",
+    "name": "Standing Desk 140cm",
+    "category": "Furniture",
+    "unitPrice": 7450000,
+    "currency": "VND",
+    "stock": 360,
+    "isActive": true
+  },
+  {
+    "id": 31,
+    "sku": "FUR-003",
+    "name": "Filing Cabinet 3 Drawers",
+    "category": "Furniture",
+    "unitPrice": 2350000,
+    "currency": "VND",
+    "stock": 366,
+    "isActive": true
+  },
+  {
+    "id": 32,
+    "sku": "FUR-004",
+    "name": "Meeting Table 8 Seats",
+    "category": "Furniture",
+    "unitPrice": 9800000,
+    "currency": "VND",
+    "stock": 295,
+    "isActive": true
+  },
+  {
+    "id": 33,
+    "sku": "FUR-005",
+    "name": "Bookshelf 5 Tiers",
+    "category": "Furniture",
+    "unitPrice": 1650000,
+    "currency": "VND",
+    "stock": 158,
+    "isActive": true
+  },
+  {
+    "id": 34,
+    "sku": "FUR-006",
+    "name": "Monitor Arm Dual",
+    "category": "Furniture",
+    "unitPrice": 1290000,
+    "currency": "VND",
+    "stock": 0,
+    "isActive": false
+  },
+  {
+    "id": 35,
+    "sku": "PAN-001",
+    "name": "Ground Coffee 1kg",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 285000,
+    "currency": "VND",
+    "stock": 363,
+    "isActive": true
+  },
+  {
+    "id": 36,
+    "sku": "PAN-002",
+    "name": "Green Tea Bags (box of 100)",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 95000,
+    "currency": "VND",
+    "stock": 188,
+    "isActive": true
+  },
+  {
+    "id": 37,
+    "sku": "PAN-003",
+    "name": "Bottled Water 500ml (case of 24)",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 110000,
+    "currency": "VND",
+    "stock": 186,
+    "isActive": true
+  },
+  {
+    "id": 38,
+    "sku": "PAN-004",
+    "name": "Paper Cups 7oz (pack of 1000)",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 420000,
+    "currency": "VND",
+    "stock": 236,
+    "isActive": true
+  },
+  {
+    "id": 39,
+    "sku": "PAN-005",
+    "name": "Hand Soap Refill 5L",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 235000,
+    "currency": "VND",
+    "stock": 216,
+    "isActive": true
+  },
+  {
+    "id": 40,
+    "sku": "PAN-006",
+    "name": "Tissue Boxes (case of 30)",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 330000,
+    "currency": "VND",
+    "stock": 46,
+    "isActive": true
+  },
+  {
+    "id": 41,
+    "sku": "PAN-007",
+    "name": "Trash Bags Large (roll of 50)",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 65000,
+    "currency": "VND",
+    "stock": 204,
+    "isActive": true
+  },
+  {
+    "id": 42,
+    "sku": "PAN-008",
+    "name": "Surface Cleaner 5L",
+    "category": "Pantry & Cleaning",
+    "unitPrice": 190000,
+    "currency": "VND",
+    "stock": 299,
+    "isActive": true
+  },
+  {
+    "id": 43,
+    "sku": "PKG-001",
+    "name": "Carton Box 40x30x30 (pack of 20)",
+    "category": "Packaging",
+    "unitPrice": 260000,
+    "currency": "VND",
+    "stock": 283,
+    "isActive": true
+  },
+  {
+    "id": 44,
+    "sku": "PKG-002",
+    "name": "Bubble Wrap Roll 50m",
+    "category": "Packaging",
+    "unitPrice": 185000,
+    "currency": "VND",
+    "stock": 255,
+    "isActive": true
+  },
+  {
+    "id": 45,
+    "sku": "PKG-003",
+    "name": "Packing Tape (pack of 6)",
+    "category": "Packaging",
+    "unitPrice": 90000,
+    "currency": "VND",
+    "stock": 59,
+    "isActive": true
+  },
+  {
+    "id": 46,
+    "sku": "PKG-004",
+    "name": "Stretch Film 500mm",
+    "category": "Packaging",
+    "unitPrice": 150000,
+    "currency": "VND",
+    "stock": 217,
+    "isActive": true
+  },
+  {
+    "id": 47,
+    "sku": "PKG-005",
+    "name": "Pallet Label Tags (pack of 500)",
+    "category": "Packaging",
+    "unitPrice": 140000,
+    "currency": "VND",
+    "stock": 259,
+    "isActive": true
+  },
+  {
+    "id": 48,
+    "sku": "PKG-006",
+    "name": "Foam Corner Protectors (pack of 100)",
+    "category": "Packaging",
+    "unitPrice": 120000,
+    "currency": "VND",
+    "stock": 384,
+    "isActive": true
+  },
+  {
+    "id": 49,
+    "sku": "PKG-007",
+    "name": "Poly Mailers A4 (pack of 100)",
+    "category": "Packaging",
+    "unitPrice": 95000,
+    "currency": "VND",
+    "stock": 307,
+    "isActive": true
+  },
+  {
+    "id": 50,
+    "sku": "PKG-008",
+    "name": "Void Fill Paper Roll",
+    "category": "Packaging",
+    "unitPrice": 175000,
+    "currency": "VND",
+    "stock": 251,
+    "isActive": true
+  }
+]

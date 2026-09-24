@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "email": "admin@orderhub.example.com",
+    "fullName": "OrderHub Admin",
+    "role": "ADMIN"
+  },
+  {
+    "id": 2,
+    "email": "ops.lead@orderhub.example.com",
+    "fullName": "Operations Lead",
+    "role": "ADMIN"
+  },
+  {
+    "id": 3,
+    "email": "sales.01@orderhub.example.com",
+    "fullName": "Sales Staff 01",
+    "role": "STAFF"
+  },
+  {
+    "id": 4,
+    "email": "sales.02@orderhub.example.com",
+    "fullName": "Sales Staff 02",
+    "role": "STAFF"
+  },
+  {
+    "id": 5,
+    "email": "support.01@orderhub.example.com",
+    "fullName": "Support Staff 01",
+    "role": "STAFF"
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "code": "CUS-001",
+    "name": "Lotus Bay Trading Co.",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Hà Nội",
+    "contactEmail": "orders@lotus-bay-trading-co.example.com",
+    "contactPhone": "+84 900 000 001"
+  },
+  {
+    "id": 2,
+    "code": "CUS-002",
+    "name": "Red River Office Supplies",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "TP. Hồ Chí Minh",
+    "contactEmail": "orders@red-river-office-supplies.example.com",
+    "contactPhone": "+84 900 000 002"
+  },
+  {
+    "id": 3,
+    "code": "CUS-003",
+    "name": "Silver Crane Logistics",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Đà Nẵng",
+    "contactEmail": "orders@silver-crane-logistics.example.com",
+    "contactPhone": "+84 900 000 003"
+  },
+  {
+    "id": 4,
+    "code": "CUS-004",
+    "name": "Green Bamboo Retail",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Hải Phòng",
+    "contactEmail": "orders@green-bamboo-retail.example.com",
+    "contactPhone": "+84 900 000 004"
+  },
+  {
+    "id": 5,
+    "code": "CUS-005",
+    "name": "Golden Rice Distribution",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "Cần Thơ",
+    "contactEmail": "orders@golden-rice-distribution.example.com",
+    "contactPhone": "+84 900 000 005"
+  },
+  {
+    "id": 6,
+    "code": "CUS-006",
+    "name": "Blue Harbor Electronics",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Hà Nội",
+    "contactEmail": "orders@blue-harbor-electronics.example.com",
+    "contactPhone": "+84 900 000 006"
+  },
+  {
+    "id": 7,
+    "code": "CUS-007",
+    "name": "Sunrise Stationery Hub",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "TP. Hồ Chí Minh",
+    "contactEmail": "orders@sunrise-stationery-hub.example.com",
+    "contactPhone": "+84 900 000 007"
+  },
+  {
+    "id": 8,
+    "code": "CUS-008",
+    "name": "Jade Mountain Hospitality",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Đà Nẵng",
+    "contactEmail": "orders@jade-mountain-hospitality.example.com",
+    "contactPhone": "+84 900 000 008"
+  },
+  {
+    "id": 9,
+    "code": "CUS-009",
+    "name": "Pearl Coast Pharmacy Group",
+    "tier": "GOLD",
+    "discountPercent": 10,
+    "city": "Hải Phòng",
+    "contactEmail": "orders@pearl-coast-pharmacy-group.example.com",
+    "contactPhone": "+84 900 000 009"
+  },
+  {
+    "id": 10,
+    "code": "CUS-010",
+    "name": "Horizon Print & Pack",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Cần Thơ",
+    "contactEmail": "orders@horizon-print-and-pack.example.com",
+    "contactPhone": "+84 900 000 010"
+  },
+  {
+    "id": 11,
+    "code": "CUS-011",
+    "name": "Lantern Street Cafes",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Hà Nội",
+    "contactEmail": "orders@lantern-street-cafes.example.com",
+    "contactPhone": "+84 900 000 011"
+  },
+  {
+    "id": 12,
+    "code": "CUS-012",
+    "name": "Summit Furniture Works",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "TP. Hồ Chí Minh",
+    "contactEmail": "orders@summit-furniture-works.example.com",
+    "contactPhone": "+84 900 000 012"
+  },
+  {
+    "id": 13,
+    "code": "CUS-013",
+    "name": "Riverside Clinic Network",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Đà Nẵng",
+    "contactEmail": "orders@riverside-clinic-network.example.com",
+    "contactPhone": "+84 900 000 013"
+  },
+  {
+    "id": 14,
+    "code": "CUS-014",
+    "name": "Evergreen Schools Supply",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "Hải Phòng",
+    "contactEmail": "orders@evergreen-schools-supply.example.com",
+    "contactPhone": "+84 900 000 014"
+  },
+  {
+    "id": 15,
+    "code": "CUS-015",
+    "name": "Cloud Nine Coworking",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "Cần Thơ",
+    "contactEmail": "orders@cloud-nine-coworking.example.com",
+    "contactPhone": "+84 900 000 015"
+  },
+  {
+    "id": 16,
+    "code": "CUS-016",
+    "name": "Seaside Hotel Partners",
+    "tier": "GOLD",
+    "discountPercent": 10,
+    "city": "Hà Nội",
+    "contactEmail": "orders@seaside-hotel-partners.example.com",
+    "contactPhone": "+84 900 000 016"
+  },
+  {
+    "id": 17,
+    "code": "CUS-017",
+    "name": "Iron Bridge Engineering",
+    "tier": "GOLD",
+    "discountPercent": 10,
+    "city": "TP. Hồ Chí Minh",
+    "contactEmail": "orders@iron-bridge-engineering.example.com",
+    "contactPhone": "+84 900 000 017"
+  },
+  {
+    "id": 18,
+    "code": "CUS-018",
+    "name": "Maple Leaf Bakery Chain",
+    "tier": "GOLD",
+    "discountPercent": 10,
+    "city": "Đà Nẵng",
+    "contactEmail": "orders@maple-leaf-bakery-chain.example.com",
+    "contactPhone": "+84 900 000 018"
+  },
+  {
+    "id": 19,
+    "code": "CUS-019",
+    "name": "Starfruit Wholesale",
+    "tier": "SILVER",
+    "discountPercent": 5,
+    "city": "Hải Phòng",
+    "contactEmail": "orders@starfruit-wholesale.example.com",
+    "contactPhone": "+84 900 000 019"
+  },
+  {
+    "id": 20,
+    "code": "CUS-020",
+    "name": "Kite Hill Media",
+    "tier": "STANDARD",
+    "discountPercent": 0,
+    "city": "Cần Thơ",
+    "contactEmail": "orders@kite-hill-media.example.com",
+    "contactPhone": "+84 900 000 020"
+  }
+]

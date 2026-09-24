@@ -1,0 +1,487 @@
+{
+  "definitions": {
+    "revenue": "Sum of `total` over orders whose status is PAID or FULFILLED.",
+    "day": "The calendar date of `createdAt` in Asia/Ho_Chi_Minh (UTC+07:00). All timestamps in orders.json already carry the +07:00 offset.",
+    "dateRange": "`from` and `to` are inclusive calendar dates.",
+    "orderTotal": "subtotal = Σ(quantity × unitPrice); discountAmount = round(subtotal × discountPercent / 100); taxAmount = round((subtotal − discountAmount) × taxPercent / 100); total = subtotal − discountAmount + taxAmount. Rounding is half-up to whole VND."
+  },
+  "totals": {
+    "orderCount": 200,
+    "revenue": 1822415815,
+    "revenueOrderCount": 137,
+    "firstOrderDate": "2026-07-01",
+    "lastOrderDate": "2026-08-29"
+  },
+  "countByStatus": {
+    "DRAFT": 9,
+    "PENDING_PAYMENT": 32,
+    "PAID": 60,
+    "FULFILLED": 77,
+    "CANCELLED": 22
+  },
+  "sumOfTotalByStatus": {
+    "DRAFT": 122818025,
+    "PENDING_PAYMENT": 297881485,
+    "PAID": 714932570,
+    "FULFILLED": 1107483245,
+    "CANCELLED": 289809575
+  },
+  "revenueByDay": {
+    "2026-07-01": {
+      "orders": 5,
+      "revenue": 33760815
+    },
+    "2026-07-02": {
+      "orders": 4,
+      "revenue": 59749525
+    },
+    "2026-07-03": {
+      "orders": 2,
+      "revenue": 36874640
+    },
+    "2026-07-04": {
+      "orders": 1,
+      "revenue": 28941000
+    },
+    "2026-07-06": {
+      "orders": 1,
+      "revenue": 34458875
+    },
+    "2026-07-07": {
+      "orders": 1,
+      "revenue": 1595880
+    },
+    "2026-07-08": {
+      "orders": 2,
+      "revenue": 23055450
+    },
+    "2026-07-10": {
+      "orders": 3,
+      "revenue": 43449450
+    },
+    "2026-07-11": {
+      "orders": 1,
+      "revenue": 17028000
+    },
+    "2026-07-12": {
+      "orders": 3,
+      "revenue": 34833480
+    },
+    "2026-07-14": {
+      "orders": 2,
+      "revenue": 13719200
+    },
+    "2026-07-15": {
+      "orders": 4,
+      "revenue": 60141400
+    },
+    "2026-07-16": {
+      "orders": 2,
+      "revenue": 25863200
+    },
+    "2026-07-17": {
+      "orders": 3,
+      "revenue": 37275150
+    },
+    "2026-07-18": {
+      "orders": 2,
+      "revenue": 27470300
+    },
+    "2026-07-19": {
+      "orders": 2,
+      "revenue": 56795750
+    },
+    "2026-07-20": {
+      "orders": 1,
+      "revenue": 794200
+    },
+    "2026-07-22": {
+      "orders": 2,
+      "revenue": 21523700
+    },
+    "2026-07-23": {
+      "orders": 4,
+      "revenue": 56326930
+    },
+    "2026-07-25": {
+      "orders": 2,
+      "revenue": 19855000
+    },
+    "2026-07-26": {
+      "orders": 3,
+      "revenue": 58625600
+    },
+    "2026-07-27": {
+      "orders": 4,
+      "revenue": 30457240
+    },
+    "2026-07-28": {
+      "orders": 2,
+      "revenue": 2878700
+    },
+    "2026-07-29": {
+      "orders": 2,
+      "revenue": 8454600
+    },
+    "2026-07-30": {
+      "orders": 4,
+      "revenue": 82610825
+    },
+    "2026-07-31": {
+      "orders": 1,
+      "revenue": 2552000
+    },
+    "2026-08-01": {
+      "orders": 3,
+      "revenue": 56939465
+    },
+    "2026-08-02": {
+      "orders": 1,
+      "revenue": 3093200
+    },
+    "2026-08-03": {
+      "orders": 6,
+      "revenue": 107724925
+    },
+    "2026-08-04": {
+      "orders": 5,
+      "revenue": 52337010
+    },
+    "2026-08-05": {
+      "orders": 1,
+      "revenue": 2365000
+    },
+    "2026-08-07": {
+      "orders": 2,
+      "revenue": 17785350
+    },
+    "2026-08-08": {
+      "orders": 1,
+      "revenue": 3740000
+    },
+    "2026-08-09": {
+      "orders": 4,
+      "revenue": 69421000
+    },
+    "2026-08-10": {
+      "orders": 4,
+      "revenue": 44332200
+    },
+    "2026-08-11": {
+      "orders": 3,
+      "revenue": 27349300
+    },
+    "2026-08-12": {
+      "orders": 2,
+      "revenue": 35970000
+    },
+    "2026-08-13": {
+      "orders": 2,
+      "revenue": 8330850
+    },
+    "2026-08-14": {
+      "orders": 4,
+      "revenue": 29663150
+    },
+    "2026-08-15": {
+      "orders": 1,
+      "revenue": 19712000
+    },
+    "2026-08-16": {
+      "orders": 2,
+      "revenue": 39835400
+    },
+    "2026-08-17": {
+      "orders": 5,
+      "revenue": 44595100
+    },
+    "2026-08-19": {
+      "orders": 3,
+      "revenue": 179248850
+    },
+    "2026-08-20": {
+      "orders": 3,
+      "revenue": 45839915
+    },
+    "2026-08-21": {
+      "orders": 2,
+      "revenue": 5496700
+    },
+    "2026-08-22": {
+      "orders": 1,
+      "revenue": 9713000
+    },
+    "2026-08-23": {
+      "orders": 4,
+      "revenue": 48750350
+    },
+    "2026-08-24": {
+      "orders": 5,
+      "revenue": 36121580
+    },
+    "2026-08-25": {
+      "orders": 2,
+      "revenue": 11204490
+    },
+    "2026-08-26": {
+      "orders": 2,
+      "revenue": 36366000
+    },
+    "2026-08-27": {
+      "orders": 2,
+      "revenue": 12943370
+    },
+    "2026-08-28": {
+      "orders": 1,
+      "revenue": 8879200
+    },
+    "2026-08-29": {
+      "orders": 3,
+      "revenue": 45567500
+    }
+  },
+  "revenueByCustomer": [
+    {
+      "customerId": 3,
+      "customerName": "Silver Crane Logistics",
+      "orders": 9,
+      "revenue": 186458800
+    },
+    {
+      "customerId": 15,
+      "customerName": "Cloud Nine Coworking",
+      "orders": 9,
+      "revenue": 158091780
+    },
+    {
+      "customerId": 8,
+      "customerName": "Jade Mountain Hospitality",
+      "orders": 10,
+      "revenue": 139235800
+    },
+    {
+      "customerId": 17,
+      "customerName": "Iron Bridge Engineering",
+      "orders": 8,
+      "revenue": 121700700
+    },
+    {
+      "customerId": 14,
+      "customerName": "Evergreen Schools Supply",
+      "orders": 7,
+      "revenue": 107339265
+    },
+    {
+      "customerId": 13,
+      "customerName": "Riverside Clinic Network",
+      "orders": 6,
+      "revenue": 105843100
+    },
+    {
+      "customerId": 5,
+      "customerName": "Golden Rice Distribution",
+      "orders": 6,
+      "revenue": 103329600
+    },
+    {
+      "customerId": 18,
+      "customerName": "Maple Leaf Bakery Chain",
+      "orders": 7,
+      "revenue": 97687260
+    },
+    {
+      "customerId": 16,
+      "customerName": "Seaside Hotel Partners",
+      "orders": 7,
+      "revenue": 87825870
+    },
+    {
+      "customerId": 7,
+      "customerName": "Sunrise Stationery Hub",
+      "orders": 8,
+      "revenue": 82841330
+    },
+    {
+      "customerId": 19,
+      "customerName": "Starfruit Wholesale",
+      "orders": 9,
+      "revenue": 80701170
+    },
+    {
+      "customerId": 2,
+      "customerName": "Red River Office Supplies",
+      "orders": 4,
+      "revenue": 80122900
+    },
+    {
+      "customerId": 4,
+      "customerName": "Green Bamboo Retail",
+      "orders": 9,
+      "revenue": 76413700
+    },
+    {
+      "customerId": 6,
+      "customerName": "Blue Harbor Electronics",
+      "orders": 6,
+      "revenue": 74145500
+    },
+    {
+      "customerId": 9,
+      "customerName": "Pearl Coast Pharmacy Group",
+      "orders": 6,
+      "revenue": 73688670
+    },
+    {
+      "customerId": 11,
+      "customerName": "Lantern Street Cafes",
+      "orders": 9,
+      "revenue": 69193300
+    },
+    {
+      "customerId": 10,
+      "customerName": "Horizon Print & Pack",
+      "orders": 5,
+      "revenue": 66677600
+    },
+    {
+      "customerId": 1,
+      "customerName": "Lotus Bay Trading Co.",
+      "orders": 4,
+      "revenue": 48745400
+    },
+    {
+      "customerId": 12,
+      "customerName": "Summit Furniture Works",
+      "orders": 4,
+      "revenue": 32275870
+    },
+    {
+      "customerId": 20,
+      "customerName": "Kite Hill Media",
+      "orders": 4,
+      "revenue": 30098200
+    }
+  ],
+  "sampleQueries": [
+    {
+      "filter": {
+        "status": "PAID",
+        "from": "2026-07-01",
+        "to": "2026-07-15"
+      },
+      "orderCount": 16,
+      "sumOfTotal": 168479520,
+      "orderCodes": [
+        "ORD-2026-0001",
+        "ORD-2026-0002",
+        "ORD-2026-0003",
+        "ORD-2026-0010",
+        "ORD-2026-0012",
+        "ORD-2026-0020",
+        "ORD-2026-0022",
+        "ORD-2026-0028",
+        "ORD-2026-0033",
+        "ORD-2026-0034",
+        "ORD-2026-0035",
+        "ORD-2026-0038",
+        "ORD-2026-0039",
+        "ORD-2026-0040",
+        "ORD-2026-0042",
+        "ORD-2026-0043"
+      ]
+    },
+    {
+      "filter": {
+        "status": "CANCELLED"
+      },
+      "orderCount": 22,
+      "sumOfTotal": 289809575,
+      "orderCodes": [
+        "ORD-2026-0015",
+        "ORD-2026-0016",
+        "ORD-2026-0019",
+        "ORD-2026-0024",
+        "ORD-2026-0031",
+        "ORD-2026-0037",
+        "ORD-2026-0056",
+        "ORD-2026-0067",
+        "ORD-2026-0070",
+        "ORD-2026-0083",
+        "ORD-2026-0084",
+        "ORD-2026-0093",
+        "ORD-2026-0094",
+        "ORD-2026-0095",
+        "ORD-2026-0102",
+        "ORD-2026-0134",
+        "ORD-2026-0135",
+        "ORD-2026-0137",
+        "ORD-2026-0177",
+        "ORD-2026-0178",
+        "ORD-2026-0189",
+        "ORD-2026-0195"
+      ]
+    },
+    {
+      "filter": {
+        "from": "2026-08-01",
+        "to": "2026-08-07"
+      },
+      "orderCount": 25,
+      "sumOfTotal": 280162300,
+      "orderCodes": [
+        "ORD-2026-0097",
+        "ORD-2026-0098",
+        "ORD-2026-0099",
+        "ORD-2026-0100",
+        "ORD-2026-0101",
+        "ORD-2026-0102",
+        "ORD-2026-0103",
+        "ORD-2026-0104",
+        "ORD-2026-0105",
+        "ORD-2026-0106",
+        "ORD-2026-0107",
+        "ORD-2026-0108",
+        "ORD-2026-0109",
+        "ORD-2026-0110",
+        "ORD-2026-0111",
+        "ORD-2026-0112",
+        "ORD-2026-0113",
+        "ORD-2026-0114",
+        "ORD-2026-0115",
+        "ORD-2026-0116",
+        "ORD-2026-0117",
+        "ORD-2026-0118",
+        "ORD-2026-0119",
+        "ORD-2026-0120",
+        "ORD-2026-0121"
+      ]
+    },
+    {
+      "filter": {
+        "status": "FULFILLED",
+        "from": "2026-08-20",
+        "to": "2026-08-29"
+      },
+      "orderCount": 16,
+      "sumOfTotal": 172673655,
+      "orderCodes": [
+        "ORD-2026-0166",
+        "ORD-2026-0172",
+        "ORD-2026-0174",
+        "ORD-2026-0175",
+        "ORD-2026-0180",
+        "ORD-2026-0181",
+        "ORD-2026-0182",
+        "ORD-2026-0183",
+        "ORD-2026-0184",
+        "ORD-2026-0185",
+        "ORD-2026-0187",
+        "ORD-2026-0190",
+        "ORD-2026-0193",
+        "ORD-2026-0198",
+        "ORD-2026-0199",
+        "ORD-2026-0200"
+      ]
+    }
+  ]
+}

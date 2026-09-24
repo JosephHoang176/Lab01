@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.Entity;
 
 public enum OrderStatus {
     DRAFT,
@@ -9,7 +9,7 @@ public enum OrderStatus {
     UNKNOWN;
 
     public static OrderStatus fromString(String statusStr) {
-        if (statusStr == null) return UNKNOWN;
+        if (statusStr == null || statusStr.isBlank()) return UNKNOWN;
         try {
             return OrderStatus.valueOf(statusStr.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
