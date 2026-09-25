@@ -1,4 +1,4 @@
-package org.example.Entity;
+package org.example.DTO;
 
 import java.util.List;
 

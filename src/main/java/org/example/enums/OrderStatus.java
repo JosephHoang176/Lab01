@@ -1,4 +1,4 @@
-package org.example.Entity;
+package org.example.enums;
 
 public enum OrderStatus {
     DRAFT,

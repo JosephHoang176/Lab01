@@ -1,4 +1,6 @@
-package org.example.Entity;
+package org.example.DTO;
+
+import org.example.enums.OrderStatus;
 
 import java.time.LocalDate;
 import java.util.List;

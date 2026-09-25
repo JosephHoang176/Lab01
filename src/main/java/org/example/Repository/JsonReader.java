@@ -3,7 +3,7 @@ package org.example.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.Entity.Order;
+import org.example.DTO.Order;
 import org.example.interfaces.IOrderRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +27,6 @@ public class JsonReader implements IOrderRepository {
 
     @Override
     public List<Order> getAllOrders() {
-
         InputStream inputStream =
                 getClass()
                         .getClassLoader()

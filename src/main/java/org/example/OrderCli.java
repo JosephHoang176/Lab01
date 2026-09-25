@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.Entity.DateRange;
-import org.example.Entity.Order;
-import org.example.Entity.OrderStatus;
+import org.example.DTO.DateRange;
+import org.example.DTO.Order;
+import org.example.enums.OrderStatus;
 import org.example.Service.OrderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,6 +18,7 @@ public class OrderCli implements CommandLineRunner {
     private final OrderService orderService;
 
     public OrderCli(OrderService orderService) {
+
         this.orderService = orderService;
     }
 
@@ -45,17 +46,26 @@ public class OrderCli implements CommandLineRunner {
         DateRange dateRange =
                 createDateRange(fromDate, toDate);
 
+
         List<Order> orders =
                 orderService.findFilteredOrders(
                         status,
                         dateRange
                 );
 
-        double revenue =
-                orderService.getRevenueFilteredByStatusAndDate(
-                        status,
-                        dateRange
-                );
+        long start = System.currentTimeMillis();
+
+        orderService.getShipments(orders);
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(
+                "Shipping enrichment time: "
+                        + (end - start)
+                        + " ms"
+        );
+
+        double revenue = orderService.getRevenue(status, dateRange);
 
         System.out.println();
         System.out.println("======================================");
@@ -106,9 +116,7 @@ public class OrderCli implements CommandLineRunner {
         System.out.println("======================================");
     }
 
-    private OrderStatus readStatus(
-            Scanner scanner
-    ) {
+    private OrderStatus readStatus(Scanner scanner) {
 
         while (true) {
 
@@ -175,6 +183,7 @@ public class OrderCli implements CommandLineRunner {
         if (fromDate == null && toDate == null) {
             return null;
         }
+
         return new DateRange(
                 fromDate,
                 toDate

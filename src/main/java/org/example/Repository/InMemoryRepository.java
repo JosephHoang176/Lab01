@@ -1,6 +1,6 @@
 package org.example.Repository;
 
-import org.example.Entity.Order;
+import org.example.DTO.Order;
 import org.example.interfaces.IOrderRepository;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.example.interfaces;
 
-import org.example.Entity.Order;
+import org.example.DTO.Order;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.example.Entity;
+package org.example.DTO;
 
 public record CustomerRevenue(
         int customerId,

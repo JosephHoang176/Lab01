@@ -1,4 +1,4 @@
-package org.example.Entity;
+package org.example.DTO;
 
 public record LineItem(int lineNo,
                        int productId,
