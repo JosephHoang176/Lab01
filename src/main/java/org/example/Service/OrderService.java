@@ -3,13 +3,16 @@ package org.example.Service;
 import org.example.DTO.Order;
 import org.example.DTO.DateRange;
 import org.example.DTO.Shipment;
+import org.example.Exceptions.ShippingTimeoutException;
 import org.example.enums.OrderStatus;
 import org.example.interfaces.IOrderCalculator;
 import org.example.interfaces.IOrderRepository;
 import org.example.interfaces.ShippingClient;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -68,24 +71,51 @@ public class OrderService {
     }
 
     public void getShipments(List<Order> orders) {
-        for (Order order : orders) {
 
-            Shipment shipment =
-                    shippingClient.findShipmentStatusByOrderId(
-                            order.id()
-                    );
+        try (ExecutorService executor =
+                     Executors.newVirtualThreadPerTaskExecutor()) {
 
-            if (shipment == null) {
-                System.out.println(
-                        order.code() + " -> NO_SHIPMENT"
+            List<Future<String>> futures = new ArrayList<>();
+
+            for (int i = 0; i < orders.size(); i++) {
+
+                Order order = orders.get(i);
+
+                Future<String> future = executor.submit(
+                        new Callable<String>() {
+                            @Override
+                            public String call() {
+
+                                try {
+                                    Shipment shipment =
+                                            shippingClient.findShipmentStatusByOrderId(
+                                                    order.id()
+                                            );
+
+                                    if (shipment == null) {
+                                        return order.code() + " -> NO_SHIPMENT";
+                                    }
+
+                                    return order.code()
+                                            + " -> "
+                                            + shipment.status();
+
+                                } catch (ShippingTimeoutException e) {
+                                    return order.code() + " -> TIMEOUT";
+                                }
+                            }
+                        }
                 );
-            } else {
-                System.out.println(
-                        order.code()
-                                + " -> "
-                                + shipment.status()
-                );
+
+                futures.add(future);
             }
+
+            for (int i = 0; i < futures.size(); i++) {
+                System.out.println(futures.get(i).get());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

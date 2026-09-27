@@ -2,7 +2,7 @@ package org.example.Client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.DTO.Shipment;
-import org.example.Exception.ShippingTimeoutException;
+import org.example.Exceptions.ShippingTimeoutException;
 import org.example.interfaces.ShippingClient;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +31,7 @@ public class MockShippingClient implements ShippingClient {
             );
         }
 
-        String url =
-                "http://[::1]:3001/shipments/" + orderId;
+        String url = "http://[::1]:3001/shipments/" + orderId;
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
