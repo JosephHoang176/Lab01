@@ -1,13 +1,13 @@
 package org.example.DTO;
 
+import jakarta.validation.constraints.NotBlank;
 import org.example.enums.ShippingStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-public record Shipment(
-    int id,
+public record ShipmentDTO(
+        @NotBlank(message = "Code khong duoc de trong") int id,
     int orderId,
     String orderCode,
     String carrier,

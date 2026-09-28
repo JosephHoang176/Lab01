@@ -1,8 +1,10 @@
 package org.example.Service;
 
-import org.example.DTO.Order;
+import org.example.DTO.OrderDTO;
 import org.example.DTO.DateRange;
-import org.example.DTO.Shipment;
+import org.example.DTO.ShipmentDTO;
+import org.example.Entity.Order;
+import org.example.Entity.Shipment;
 import org.example.Exceptions.ShippingTimeoutException;
 import org.example.enums.OrderStatus;
 import org.example.interfaces.IOrderCalculator;
@@ -23,11 +25,8 @@ public class OrderService {
     private final IOrderCalculator calculator;
     private final IOrderRepository repository;
     private final ShippingClient shippingClient;
-    public OrderService(
-            IOrderCalculator calculator,
-            IOrderRepository repository,
-            ShippingClient shippingClient
-    ) {
+
+    public OrderService(IOrderCalculator calculator, IOrderRepository repository, ShippingClient shippingClient) {
         this.calculator = calculator;
         this.repository = repository;
         this.shippingClient = shippingClient;
@@ -37,17 +36,18 @@ public class OrderService {
         if (status == null) {
             return true;
         }
-        return order.status() == status;
+        return order.getStatus() == status;
     }
 
     private boolean matchesDate(Order order, DateRange dateRange) {
         if (dateRange == null) {
             return true;
         }
-        if (order.createdAt() == null) {
+        if (order.getCreatedAt() == null) {
             return false;
         }
-        return dateRange.includes(order.createdAt().toLocalDate()
+        return dateRange.includes(
+                order.getCreatedAt().toLocalDate()
         );
     }
 
@@ -56,66 +56,156 @@ public class OrderService {
         if (orders == null || orders.isEmpty()) {
             return List.of();
         }
-        return orders.stream()
-                .filter(order -> matchesStatus(order, status))
-                .filter(order -> matchesDate(order, dateRange))
-                .toList();
+        List<Order> filteredOrders = new ArrayList<>();
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            if (matchesStatus(order, status)
+                    && matchesDate(order, dateRange)) {
+                filteredOrders.add(order);
+            }
+        }
+        return filteredOrders;
     }
 
-    public double getRevenue(
-            OrderStatus status,
-            DateRange dateRange
-    ) {
+    public double getRevenue(OrderStatus status, DateRange dateRange) {
         List<Order> filteredOrders = findFilteredOrders(status, dateRange);
         return calculator.calculateRevenue(filteredOrders);
     }
 
+
+    //Phần giải quyết Lab 3
     public void getShipments(List<Order> orders) {
-
-        try (ExecutorService executor =
-                     Executors.newVirtualThreadPerTaskExecutor()) {
-
+        if (orders == null || orders.isEmpty()) {
+            return;
+        }
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
             List<Future<String>> futures = new ArrayList<>();
-
             for (int i = 0; i < orders.size(); i++) {
-
                 Order order = orders.get(i);
-
-                Future<String> future = executor.submit(
-                        new Callable<String>() {
+                Future<String> future = executor.submit(new Callable<String>() {
                             @Override
                             public String call() {
-
                                 try {
-                                    Shipment shipment =
-                                            shippingClient.findShipmentStatusByOrderId(
-                                                    order.id()
-                                            );
-
+                                    Shipment shipment = shippingClient.findShipmentStatusByOrderId(order.getId());
                                     if (shipment == null) {
-                                        return order.code() + " -> NO_SHIPMENT";
+                                        return order.getCode()
+                                                + " -> NO_SHIPMENT";
                                     }
-
-                                    return order.code()
+                                    return order.getCode()
                                             + " -> "
-                                            + shipment.status();
-
+                                            + shipment.getStatus();
                                 } catch (ShippingTimeoutException e) {
-                                    return order.code() + " -> TIMEOUT";
+                                    return order.getCode()
+                                            + " -> TIMEOUT";
                                 }
                             }
                         }
                 );
-
                 futures.add(future);
             }
-
             for (int i = 0; i < futures.size(); i++) {
-                System.out.println(futures.get(i).get());
+                System.out.println(
+                        futures.get(i).get()
+                );
             }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    //Phần giải quyết Lab 4
+    public List<Order> findOrders(OrderStatus status, DateRange dateRange) {
+        return findFilteredOrders(status, dateRange);
+    }
+
+    public Order findOrderById(int orderId) {
+        if (orderId <= 0) {
+            throw new IllegalArgumentException(
+                    "Id khong hop le"
+            );
+        }
+        Order order = repository.getOrderById(orderId);
+        if (order == null) {throw new IllegalArgumentException("Order khong ton tai");}
+        return order;
+    }
+
+    public Order createOrder(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException(
+                    "Order khong hop le"
+            );
+        }
+        if (order.getId() <= 0) {
+            throw new IllegalArgumentException(
+                    "Id khong hop le"
+            );
+        }
+        if (order.getStatus() == null || order.getStatus() == OrderStatus.UNKNOWN) {order.setStatus(OrderStatus.DRAFT);}
+        return repository.save(order);
+    }
+
+    public Order changeStatus(int orderId, OrderStatus newStatus) {
+        if (newStatus == null || newStatus == OrderStatus.UNKNOWN) {
+            throw new IllegalArgumentException(
+                    "Status khong hop le"
+            );
+        }
+        Order order = findOrderById(orderId);
+        OrderStatus currentStatus = order.getStatus();
+        if (!isValidStatusTransition(currentStatus, newStatus)) {
+            throw new IllegalStateException("Khong the chuyen status tu " + currentStatus + " sang " + newStatus);
+        }
+        order.setStatus(newStatus);
+        return repository.update(order);
+    }
+
+    public Order cancelOrder(int orderId) {
+        Order order = findOrderById(orderId);
+        if (!isValidStatusTransition(order.getStatus(), OrderStatus.CANCELLED)) {
+            throw new IllegalStateException("Khong the cancel order voi status " + order.getStatus());
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        return repository.update(order);
+    }
+
+    private boolean isValidStatusTransition(
+            OrderStatus currentStatus,
+            OrderStatus newStatus
+    ) {
+
+        if (currentStatus == null
+                || newStatus == null) {
+            return false;
+        }
+        if (currentStatus == OrderStatus.UNKNOWN
+                || newStatus == OrderStatus.UNKNOWN) {
+            return false;
+        }
+        if (currentStatus == newStatus) {
+            return false;
+        }
+        switch (currentStatus) {
+            case DRAFT:
+                return newStatus == OrderStatus.PENDING_PAYMENT || newStatus == OrderStatus.CANCELLED;
+
+            case PENDING_PAYMENT:
+                return newStatus == OrderStatus.PAID || newStatus == OrderStatus.CANCELLED;
+
+            case PAID:
+                return newStatus == OrderStatus.FULFILLED || newStatus == OrderStatus.CANCELLED;
+
+            case FULFILLED:
+                return false;
+
+            case CANCELLED:
+                return false;
+
+            case UNKNOWN:
+                return false;
+
+            default:
+                return false;
         }
     }
 }

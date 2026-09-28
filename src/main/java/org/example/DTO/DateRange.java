@@ -1,5 +1,7 @@
 package org.example.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 public record DateRange(LocalDate fromDate, LocalDate toDate) {

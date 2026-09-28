@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: order-report-cli
+
+  profiles:
+    default: dev
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  app:
+    name: order-report-cli
+    description: Mini Orders API
+    version: 1.0-SNAPSHOT

@@ -1,6 +1,7 @@
 package org.example.Repository;
 
-import org.example.DTO.Order;
+import org.example.DTO.OrderDTO;
+import org.example.Entity.Order;
 import org.example.interfaces.IOrderCalculator;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class Calculate implements IOrderCalculator {
 
         double revenue = 0.0;
         for (Order order : orders) {
-            revenue += order.total();
+            revenue += order.getTotal();
         }
         return revenue;
     }

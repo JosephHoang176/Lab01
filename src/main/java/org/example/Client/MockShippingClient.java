@@ -1,8 +1,10 @@
 package org.example.Client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.DTO.Shipment;
+import org.example.DTO.ShipmentDTO;
+import org.example.Entity.Shipment;
 import org.example.Exceptions.ShippingTimeoutException;
+import org.example.Mapping.ShipmentMapper;
 import org.example.interfaces.ShippingClient;
 import org.springframework.stereotype.Component;
 
@@ -50,11 +52,12 @@ public class MockShippingClient implements ShippingClient {
                 return null;
             }
 
-            return objectMapper.readValue(
-                    response.body(),
-                    Shipment.class
-            );
-
+            ShipmentDTO shipmentDTO =
+                    objectMapper.readValue(
+                            response.body(),
+                            ShipmentDTO.class
+                    );
+            return ShipmentMapper.toEntity(shipmentDTO);
         } catch (HttpTimeoutException e) {
             throw new ShippingTimeoutException(e);
 

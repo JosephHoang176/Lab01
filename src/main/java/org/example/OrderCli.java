@@ -1,7 +1,8 @@
 package org.example;
 
 import org.example.DTO.DateRange;
-import org.example.DTO.Order;
+import org.example.DTO.OrderDTO;
+import org.example.Entity.Order;
 import org.example.enums.OrderStatus;
 import org.example.Service.OrderService;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +19,6 @@ public class OrderCli implements CommandLineRunner {
     private final OrderService orderService;
 
     public OrderCli(OrderService orderService) {
-
         this.orderService = orderService;
     }
 
@@ -103,13 +103,13 @@ public class OrderCli implements CommandLineRunner {
 
             System.out.printf(
                     "%s | %s | %s | %.0f %s%n",
-                    order.code(),
-                    order.status(),
-                    order.createdAt() == null
+                    order.getCode(),
+                    order.getStatus(),
+                    order.getCreatedAt() == null
                             ? "N/A"
-                            : order.createdAt().toLocalDate(),
-                    order.total(),
-                    order.currency()
+                            : order.getCreatedAt().toLocalDate(),
+                    order.getTotal(),
+                    order.getCurrency()
             );
         }
 

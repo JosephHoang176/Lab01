@@ -1,12 +1,13 @@
 package org.example.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.example.Entity.Order_Item;
 import org.example.enums.OrderStatus;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public record Order(
+public record OrderDTO(
         int id,
         String code,
         int customerId,
@@ -15,7 +16,7 @@ public record Order(
         OrderStatus status,
 
         @JsonProperty("lines")
-        List<LineItem> lines,
+        List<Order_Item> lines,
 
         double subtotal,
         double discountPercent,
