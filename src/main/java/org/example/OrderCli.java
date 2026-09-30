@@ -39,70 +39,35 @@ public class OrderCli implements CommandLineRunner {
                 scanner,
                 "From date (yyyy-MM-dd, blank = all): "
         );
-
-        LocalDate toDate = readDate(
-                scanner,
-                "To date (yyyy-MM-dd, blank = all): "
-        );
-
-        DateRange dateRange =
-                createDateRange(fromDate, toDate);
-
-
+        LocalDate toDate = readDate(scanner, "To date (yyyy-MM-dd, blank = all): ");
+        DateRange dateRange = createDateRange(fromDate, toDate);
         List<Order> orders =
                 orderService.findFilteredOrders(
                         status,
                         dateRange
                 );
-
         long start = System.currentTimeMillis();
-
         orderService.getShipments(orders);
-
         long end = System.currentTimeMillis();
-
         System.out.println(
                 "Shipping enrichment time: "
                         + (end - start)
                         + " ms"
         );
-
         double revenue = orderService.getRevenue(status, dateRange);
-
         System.out.println();
         System.out.println("======================================");
         System.out.println("               RESULT");
         System.out.println("======================================");
-
-        System.out.println(
-                "Status: "
-                        + (status == null ? "ALL" : status)
-        );
-
-        System.out.println(
-                "From: "
-                        + (fromDate == null ? "ALL" : fromDate)
-        );
-
-        System.out.println(
-                "To: "
-                        + (toDate == null ? "ALL" : toDate)
-        );
-
-        System.out.println(
-                "Order count: " + orders.size()
-        );
-
-        System.out.printf(
-                "Revenue: %.0f%n",
-                revenue
-        );
-
+        System.out.println("Status: " + (status == null ? "ALL" : status));
+        System.out.println("From: " + (fromDate == null ? "ALL" : fromDate));
+        System.out.println("To: " + (toDate == null ? "ALL" : toDate));
+        System.out.println("Order count: " + orders.size());
+        System.out.printf("Revenue: %.0f%n", revenue);
         System.out.println();
         System.out.println("Orders:");
 
         for (Order order : orders) {
-
             System.out.printf(
                     "%s | %s | %s | %.0f %s%n",
                     order.getCode(),
@@ -114,37 +79,21 @@ public class OrderCli implements CommandLineRunner {
                     order.getCurrency()
             );
         }
-
         System.out.println("======================================");
     }
 
     private OrderStatus readStatus(Scanner scanner) {
-
         while (true) {
-
-            System.out.print(
-                    "Status (PAID, FULFILLED, CANCELLED, ... / blank = all): "
-            );
-
-            String input =
-                    scanner.nextLine().trim();
-
+            System.out.print("Status (PAID, FULFILLED, CANCELLED, ... / blank = all): ");
+            String input = scanner.nextLine().trim();
             if (input.isBlank()) {
                 return null;
             }
-
-            OrderStatus status =
-                    OrderStatus.fromString(input);
-
-            if (status != OrderStatus.UNKNOWN
-                    || input.equalsIgnoreCase("UNKNOWN")) {
-
+            OrderStatus status = OrderStatus.fromString(input);
+            if (status != OrderStatus.UNKNOWN || input.equalsIgnoreCase("UNKNOWN")) {
                 return status;
             }
-
-            System.out.println(
-                    "Invalid status. Please try again."
-            );
+            System.out.println("Invalid status. Please try again.");
         }
     }
 
@@ -154,41 +103,23 @@ public class OrderCli implements CommandLineRunner {
     ) {
 
         while (true) {
-
             System.out.print(message);
-
-            String input =
-                    scanner.nextLine().trim();
-
+            String input = scanner.nextLine().trim();
             if (input.isBlank()) {
                 return null;
             }
-
             try {
-
                 return LocalDate.parse(input);
-
             } catch (DateTimeParseException e) {
-
-                System.out.println(
-                        "Invalid date. Example: 2026-07-01"
-                );
+                System.out.println("Invalid date. Example: 2026-07-01");
             }
         }
     }
 
-    private DateRange createDateRange(
-            LocalDate fromDate,
-            LocalDate toDate
-    ) {
-
+    private DateRange createDateRange(LocalDate fromDate, LocalDate toDate) {
         if (fromDate == null && toDate == null) {
             return null;
         }
-
-        return new DateRange(
-                fromDate,
-                toDate
-        );
+        return new DateRange(fromDate, toDate);
     }
 }
