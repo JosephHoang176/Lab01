@@ -28,6 +28,9 @@ public class OrderMapper {
         order.setPaidAt(dto.paidAt());
         order.setFulfilledAt(dto.fulfilledAt());
         order.setCancelledAt(dto.cancelledAt());
+        if (dto.pricingStatus() != null) {
+            order.setPricingStatus(dto.pricingStatus());
+        }
         return order;
 
     }
@@ -56,7 +59,8 @@ public class OrderMapper {
                 entity.getUpdatedAt(),
                 entity.getPaidAt(),
                 entity.getFulfilledAt(),
-                entity.getCancelledAt()
+                entity.getCancelledAt(),
+                entity.getPricingStatus()
         );
     }
 }

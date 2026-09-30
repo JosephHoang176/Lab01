@@ -1,13 +1,26 @@
 package org.example.Entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Products", schema = "dbo")
 public class Product {
+    @Id
+    @Column(name = "id")
     private int id;
+    @Column(name = "sku", nullable = false, length = 100, unique = true)
     private String sku;
+    @Column(name = "name", nullable = false, length = 200)
     private String name;
+    @Column(name = "category", length = 100)
     private String category;
+    @Column(name = "unit_price", nullable = false)
     private long unitPrice;
+    @Column(name = "currency", nullable = false, length = 3)
     private String currency;
+    @Column(name = "stock", nullable = false)
     private int stock;
+    @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
     public Product() {

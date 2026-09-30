@@ -30,5 +30,6 @@ public record OrderDTO(
         OffsetDateTime updatedAt,
         OffsetDateTime paidAt,
         OffsetDateTime fulfilledAt,
-        OffsetDateTime cancelledAt
+        OffsetDateTime cancelledAt,
+        String pricingStatus
 ) {}

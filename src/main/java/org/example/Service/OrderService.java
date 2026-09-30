@@ -1,7 +1,11 @@
 package org.example.Service;
 
 import org.example.DTO.OrderDTO;
+import org.example.DTO.PricingItemRequest;
+import org.example.DTO.PricingRequest;
+import org.example.DTO.PricingResponse;
 import org.example.DTO.DateRange;
+import org.example.Client.PricingClient;
 import org.example.DTO.ShipmentDTO;
 import org.example.Entity.Order;
 import org.example.Entity.Shipment;
@@ -10,10 +14,14 @@ import org.example.enums.OrderStatus;
 import org.example.interfaces.IOrderCalculator;
 import org.example.interfaces.IOrderRepository;
 import org.example.interfaces.ShippingClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,14 +30,27 @@ import java.util.concurrent.Future;
 @Service
 public class OrderService {
 
-    private final IOrderCalculator calculator;
+    @Qualifier("jsonReader")
     private final IOrderRepository repository;
+
     private final ShippingClient shippingClient;
 
-    public OrderService(IOrderCalculator calculator, IOrderRepository repository, ShippingClient shippingClient) {
-        this.calculator = calculator;
-        this.repository = repository;
-        this.shippingClient = shippingClient;
+    @Qualifier("orderJPARepo")
+    private final IOrderRepository jpaRepository;
+
+    private final PricingClient pricingClient;
+    private final ExecutorService pricingExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    public OrderService(
+            @Qualifier("jsonReader") IOrderRepository repository,
+            ShippingClient shippingClient,
+            @Qualifier("orderJPARepo") IOrderRepository jpaRepository,
+            PricingClient pricingClient
+    ) {
+        this.repository = repository; //repository đến orders.json (task của Lab 1 và Lab 2).
+        this.shippingClient = shippingClient; //giả lập gọi api để lấy shippingStatus ở Lab 3
+        this.jpaRepository = jpaRepository; // Repo sử dụng thư viện JPA đến Database SQL Server.
+        this.pricingClient = pricingClient;
     }
 
     private boolean matchesStatus(Order order, OrderStatus status) {
@@ -59,8 +80,7 @@ public class OrderService {
         List<Order> filteredOrders = new ArrayList<>();
         for (int i = 0; i < orders.size(); i++) {
             Order order = orders.get(i);
-            if (matchesStatus(order, status)
-                    && matchesDate(order, dateRange)) {
+            if (matchesStatus(order, status) && matchesDate(order, dateRange)) {
                 filteredOrders.add(order);
             }
         }
@@ -69,7 +89,11 @@ public class OrderService {
 
     public double getRevenue(OrderStatus status, DateRange dateRange) {
         List<Order> filteredOrders = findFilteredOrders(status, dateRange);
-        return calculator.calculateRevenue(filteredOrders);
+        double revenue = 0;
+        for (Order order : filteredOrders) {
+            revenue += order.getTotal();
+        }
+        return revenue;
     }
 
 
@@ -125,7 +149,7 @@ public class OrderService {
                     "Id khong hop le"
             );
         }
-        Order order = repository.getOrderById(orderId);
+        Order order = jpaRepository.getOrderById(orderId);
         if (order == null) {throw new IllegalArgumentException("Order khong ton tai");}
         return order;
     }
@@ -142,7 +166,66 @@ public class OrderService {
             );
         }
         if (order.getStatus() == null || order.getStatus() == OrderStatus.UNKNOWN) {order.setStatus(OrderStatus.DRAFT);}
-        return repository.save(order);
+        PricingRequest pricingRequest = toPricingRequest(order);
+        Order createdOrder = jpaRepository.save(order);
+        createdOrder.setPricingStatus("PENDING");
+        schedulePricing(createdOrder.getId(), pricingRequest);
+        return createdOrder;
+    }
+
+    private void schedulePricing(int orderId, PricingRequest pricingRequest) {
+        CompletableFuture.runAsync(
+                () -> calculateAndPersistPricing(orderId, pricingRequest),
+                pricingExecutor
+        );
+    }
+
+    private void calculateAndPersistPricing(int orderId, PricingRequest pricingRequest) {
+        Order order = jpaRepository.getOrderById(orderId);
+        if (order == null) {
+            return;
+        }
+
+        try {
+            PricingResponse pricing = calculateWithRetry(pricingRequest);
+            order.setSubtotal(pricing.subtotal());
+            order.setDiscountAmount(pricing.discountAmount());
+            order.setTaxAmount(pricing.taxAmount());
+            order.setTotal(pricing.total());
+            order.setPricingStatus("COMPLETED");
+        } catch (RuntimeException ex) {
+            order.setPricingStatus("FAILED");
+        }
+        jpaRepository.update(order);
+    }
+
+    private PricingRequest toPricingRequest(Order order) {
+        List<PricingItemRequest> items = new ArrayList<>();
+        for (var line : order.getLines()) {
+            items.add(new PricingItemRequest(line.getQuantity(), line.getUnitPrice()));
+        }
+        return new PricingRequest(items, order.getDiscountPercent(), order.getTaxPercent());
+    }
+
+    private PricingResponse calculateWithRetry(PricingRequest pricingRequest) {
+        RuntimeException lastFailure = null;
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                return CompletableFuture
+                        .supplyAsync(() -> pricingClient.calculate(pricingRequest), pricingExecutor)
+                        .orTimeout(2, java.util.concurrent.TimeUnit.SECONDS)
+                        .join();
+            } catch (CompletionException ex) {
+                lastFailure = new IllegalStateException(
+                        "Pricing service unavailable on attempt " + attempt, ex);
+            }
+        }
+        throw lastFailure;
+    }
+
+    @PreDestroy
+    void shutdownPricingExecutor() {
+        pricingExecutor.close();
     }
 
     public Order changeStatus(int orderId, OrderStatus newStatus) {
@@ -157,7 +240,7 @@ public class OrderService {
             throw new IllegalStateException("Khong the chuyen status tu " + currentStatus + " sang " + newStatus);
         }
         order.setStatus(newStatus);
-        return repository.update(order);
+        return jpaRepository.update(order);
     }
 
     public Order cancelOrder(int orderId) {
@@ -166,7 +249,7 @@ public class OrderService {
             throw new IllegalStateException("Khong the cancel order voi status " + order.getStatus());
         }
         order.setStatus(OrderStatus.CANCELLED);
-        return repository.update(order);
+        return jpaRepository.update(order);
     }
 
     private boolean isValidStatusTransition(
@@ -174,12 +257,10 @@ public class OrderService {
             OrderStatus newStatus
     ) {
 
-        if (currentStatus == null
-                || newStatus == null) {
+        if (currentStatus == null || newStatus == null) {
             return false;
         }
-        if (currentStatus == OrderStatus.UNKNOWN
-                || newStatus == OrderStatus.UNKNOWN) {
+        if (currentStatus == OrderStatus.UNKNOWN || newStatus == OrderStatus.UNKNOWN) {
             return false;
         }
         if (currentStatus == newStatus) {

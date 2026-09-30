@@ -1,13 +1,26 @@
 package org.example.Entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Customers", schema = "dbo")
 public class Customer {
+    @Id
+    @Column(name = "id")
     private int id;
+    @Column(name = "code", nullable = false, length = 50, unique = true)
     private String code;
+    @Column(name = "name", nullable = false, length = 200)
     private String name;
+    @Column(name = "tier", length = 50)
     private String tier;
+    @Column(name = "discount_percent", nullable = false, precision = 5, scale = 2)
     private int discountPercent;
+    @Column(name = "city", length = 100)
     private String city;
+    @Column(name = "contact_email", length = 320)
     private String contactEmail;
+    @Column(name = "contact_phone", length = 30)
     private String contactPhone;
 
     public Customer() {
