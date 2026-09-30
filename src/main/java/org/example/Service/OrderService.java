@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PreDestroy;
+import org.slf4j.MDC;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -73,7 +75,7 @@ public class OrderService {
     }
 
     public List<Order> findFilteredOrders(OrderStatus status, DateRange dateRange) {
-        List<Order> orders = repository.getAllOrders();
+        List<Order> orders = jpaRepository.getAllOrders();
         if (orders == null || orders.isEmpty()) {
             return List.of();
         }
@@ -166,16 +168,33 @@ public class OrderService {
             );
         }
         if (order.getStatus() == null || order.getStatus() == OrderStatus.UNKNOWN) {order.setStatus(OrderStatus.DRAFT);}
+        OffsetDateTime now = OffsetDateTime.now();
+        if (order.getCreatedAt() == null) {
+            order.setCreatedAt(now);
+        }
+        if (order.getUpdatedAt() == null) {
+            order.setUpdatedAt(now);
+        }
         PricingRequest pricingRequest = toPricingRequest(order);
+        order.setPricingStatus("PENDING");
         Order createdOrder = jpaRepository.save(order);
-        createdOrder.setPricingStatus("PENDING");
         schedulePricing(createdOrder.getId(), pricingRequest);
         return createdOrder;
     }
 
     private void schedulePricing(int orderId, PricingRequest pricingRequest) {
+        String correlationId = MDC.get("correlationId");
         CompletableFuture.runAsync(
-                () -> calculateAndPersistPricing(orderId, pricingRequest),
+                () -> {
+                    if (correlationId != null) {
+                        MDC.put("correlationId", correlationId);
+                    }
+                    try {
+                        calculateAndPersistPricing(orderId, pricingRequest);
+                    } finally {
+                        MDC.remove("correlationId");
+                    }
+                },
                 pricingExecutor
         );
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <module name="TreeWalker">
+        <module name="RegexpSinglelineJava">
+            <property name="format"
+                      value="(?i)(password|secret|api[_-]?key)\s*[:=]\s*[&quot;'][^&quot;']+[&quot;']"/>
+            <property name="maximum" value="0"/>
+            <property name="message"
+                      value="Do not hardcode credentials or API secrets in Java source."/>
+        </module>
+    </module>
+</module>

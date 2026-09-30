@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.DTO.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     private static final String CORRELATION_ID_HEADER = "X-Correlation-ID";
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
@@ -53,6 +56,8 @@ public class GlobalExceptionHandler {
             Exception e,
             HttpServletRequest request
     ) {
+        LOGGER.error("Unhandled request failure method={} path={}",
+                request.getMethod(), request.getRequestURI(), e);
         ErrorResponse errorResponse =
                 new ErrorResponse(
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),

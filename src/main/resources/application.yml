@@ -6,13 +6,15 @@ spring:
     default: dev
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=OrderReportDb;encrypt=true;trustServerCertificate=true
-    username: orderapp
-    password: hoang123
+    url: ${DB_URL:jdbc:sqlserver://localhost:1433;databaseName=OrderReportDb;encrypt=true;trustServerCertificate=true}
+    username: ${DB_USERNAME:orderapp}
+    password: ${DB_PASSWORD}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
     hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
     show-sql: true
     properties:
@@ -33,11 +35,18 @@ spring:
             readTimeout: 2000
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 pricing:
   service:
     url: ${PRICING_SERVICE_URL:http://localhost:8081}
+
+logging:
+  structured:
+    format:
+      console: logstash
+  level:
+    org.example: INFO
 
 management:
   endpoints:

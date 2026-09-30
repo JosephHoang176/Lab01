@@ -127,6 +127,14 @@ BEGIN
 END;
 GO
 
+IF COL_LENGTH(N'dbo.Orders', N'pricing_status') IS NULL
+BEGIN
+    ALTER TABLE dbo.Orders
+        ADD pricing_status nvarchar(20) NOT NULL
+            CONSTRAINT DF_Orders_PricingStatus DEFAULT (N'PENDING');
+END;
+GO
+
 IF OBJECT_ID(N'dbo.OrderItems', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.OrderItems

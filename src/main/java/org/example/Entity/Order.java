@@ -51,7 +51,7 @@ public class Order {
     @Column(name = "cancelled_at")
     private OffsetDateTime cancelledAt;
 
-    @Transient
+    @Column(name = "pricing_status", nullable = false, length = 20)
     private String pricingStatus = "PENDING";
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

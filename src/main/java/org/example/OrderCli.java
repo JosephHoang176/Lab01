@@ -6,6 +6,7 @@ import org.example.Entity.Order;
 import org.example.enums.OrderStatus;
 import org.example.Service.OrderService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
+@Profile("cli")
 public class OrderCli implements CommandLineRunner {
 
     private final OrderService orderService;

@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
         name = "pricing-service",
-        url = "${pricing.service.url}"
+        url = "${pricing.service.url}",
+        configuration = CorrelationIdFeignConfiguration.class
 )
 public interface PricingClient {
 
