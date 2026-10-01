@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "Shipments", schema = "dbo")
+@Table(name = "shipments", schema = "dbo")
 public class Shipment {
     @Id
     @Column(name = "id")

@@ -4,11 +4,12 @@ import org.example.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Orders", schema = "dbo")
+@Table(name = "orders", schema = "dbo")
 public class Order {
     @Id
     @Column(name = "id")
@@ -26,18 +27,18 @@ public class Order {
     private OrderStatus status;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order_Item> lines = new ArrayList<>();
-    @Column(name = "subtotal", nullable = false)
-    private double subtotal;
-    @Column(name = "discount_percent", nullable = false)
-    private double discountPercent;
-    @Column(name = "discount_amount", nullable = false)
-    private double discountAmount;
-    @Column(name = "tax_percent", nullable = false)
-    private double taxPercent;
-    @Column(name = "tax_amount", nullable = false)
-    private double taxAmount;
-    @Column(name = "total", nullable = false)
-    private double total;
+    @Column(name = "subtotal", nullable = false, precision = 19, scale = 4)
+    private BigDecimal subtotal;
+    @Column(name = "discount_percent", nullable = false, precision = 5, scale = 2)
+    private BigDecimal discountPercent;
+    @Column(name = "discount_amount", nullable = false, precision = 19, scale = 4)
+    private BigDecimal discountAmount;
+    @Column(name = "tax_percent", nullable = false, precision = 5, scale = 2)
+    private BigDecimal taxPercent;
+    @Column(name = "tax_amount", nullable = false, precision = 19, scale = 4)
+    private BigDecimal taxAmount;
+    @Column(name = "total", nullable = false, precision = 19, scale = 4)
+    private BigDecimal total;
     @Column(name = "currency", nullable = false, length = 3)
     private String currency;
     @Column(name = "created_at", nullable = false)
@@ -91,12 +92,12 @@ public class Order {
         this.createdBy = createdBy;
         this.status = status;
         this.lines = lines == null ? new ArrayList<>() : new ArrayList<>(lines);
-        this.subtotal = subtotal;
-        this.discountPercent = discountPercent;
-        this.discountAmount = discountAmount;
-        this.taxPercent = taxPercent;
-        this.taxAmount = taxAmount;
-        this.total = total;
+        this.subtotal = BigDecimal.valueOf(subtotal);
+        this.discountPercent = BigDecimal.valueOf(discountPercent);
+        this.discountAmount = BigDecimal.valueOf(discountAmount);
+        this.taxPercent = BigDecimal.valueOf(taxPercent);
+        this.taxAmount = BigDecimal.valueOf(taxAmount);
+        this.total = BigDecimal.valueOf(total);
         this.currency = currency;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -133,18 +134,18 @@ public class Order {
         line.setOrderId(this.id);
         this.lines.add(line);
     }
-    public double getSubtotal() { return subtotal; }
-    public void setSubtotal(double subtotal) { this.subtotal = subtotal; }
-    public double getDiscountPercent() { return discountPercent; }
-    public void setDiscountPercent(double discountPercent) { this.discountPercent = discountPercent; }
-    public double getDiscountAmount() { return discountAmount; }
-    public void setDiscountAmount(double discountAmount) { this.discountAmount = discountAmount; }
-    public double getTaxPercent() { return taxPercent; }
-    public void setTaxPercent(double taxPercent) { this.taxPercent = taxPercent; }
-    public double getTaxAmount() { return taxAmount; }
-    public void setTaxAmount(double taxAmount) { this.taxAmount = taxAmount; }
-    public double getTotal() { return total; }
-    public void setTotal(double total) { this.total = total; }
+    public double getSubtotal() { return subtotal == null ? 0 : subtotal.doubleValue(); }
+    public void setSubtotal(double subtotal) { this.subtotal = BigDecimal.valueOf(subtotal); }
+    public double getDiscountPercent() { return discountPercent == null ? 0 : discountPercent.doubleValue(); }
+    public void setDiscountPercent(double discountPercent) { this.discountPercent = BigDecimal.valueOf(discountPercent); }
+    public double getDiscountAmount() { return discountAmount == null ? 0 : discountAmount.doubleValue(); }
+    public void setDiscountAmount(double discountAmount) { this.discountAmount = BigDecimal.valueOf(discountAmount); }
+    public double getTaxPercent() { return taxPercent == null ? 0 : taxPercent.doubleValue(); }
+    public void setTaxPercent(double taxPercent) { this.taxPercent = BigDecimal.valueOf(taxPercent); }
+    public double getTaxAmount() { return taxAmount == null ? 0 : taxAmount.doubleValue(); }
+    public void setTaxAmount(double taxAmount) { this.taxAmount = BigDecimal.valueOf(taxAmount); }
+    public double getTotal() { return total == null ? 0 : total.doubleValue(); }
+    public void setTotal(double total) { this.total = BigDecimal.valueOf(total); }
     public String getCurrency() { return currency; }
     public void setCurrency(String currency) { this.currency = currency; }
     public OffsetDateTime getCreatedAt() { return createdAt; }

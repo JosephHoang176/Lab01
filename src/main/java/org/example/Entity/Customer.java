@@ -1,9 +1,10 @@
 package org.example.Entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Customers", schema = "dbo")
+@Table(name = "customers", schema = "dbo")
 public class Customer {
     @Id
     @Column(name = "id")
@@ -15,7 +16,7 @@ public class Customer {
     @Column(name = "tier", length = 50)
     private String tier;
     @Column(name = "discount_percent", nullable = false, precision = 5, scale = 2)
-    private int discountPercent;
+    private BigDecimal discountPercent;
     @Column(name = "city", length = 100)
     private String city;
     @Column(name = "contact_email", length = 320)
@@ -32,7 +33,7 @@ public class Customer {
         this.code = code;
         this.name = name;
         this.tier = tier;
-        this.discountPercent = discountPercent;
+        this.discountPercent = BigDecimal.valueOf(discountPercent);
         this.city = city;
         this.contactEmail = contactEmail;
         this.contactPhone = contactPhone;
@@ -71,11 +72,11 @@ public class Customer {
     }
 
     public int getDiscountPercent() {
-        return discountPercent;
+        return discountPercent == null ? 0 : discountPercent.intValue();
     }
 
     public void setDiscountPercent(int discountPercent) {
-        this.discountPercent = discountPercent;
+        this.discountPercent = BigDecimal.valueOf(discountPercent);
     }
 
     public String getCity() {

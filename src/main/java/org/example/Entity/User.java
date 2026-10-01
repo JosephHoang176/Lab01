@@ -4,7 +4,7 @@ import org.example.enums.User_Type;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Users", schema = "dbo")
+@Table(name = "users", schema = "dbo")
 public class User {
     @Id
     @Column(name = "id")

@@ -173,6 +173,73 @@ workflow trạng thái và `answer-key.json`. Khi kiểm tra L1-L3, cần dùng 
 quy tắc này; đặc biệt doanh thu chỉ bao gồm đơn `PAID` hoặc `FULFILLED`, ngày
 được lấy theo múi giờ `Asia/Ho_Chi_Minh`, và khoảng ngày là inclusive.
 
+## 5.4 PostgreSQL migrations và seed
+
+Day 7 dùng PostgreSQL làm database chính. Flyway tự động chạy các migration
+trong `src/main/resources/db/migration` khi ứng dụng khởi động:
+
+| Migration | Nội dung |
+|---|---|
+| `V1__create_orderhub_schema.sql` | Tạo schema `dbo`, sáu bảng quan hệ, khóa, constraint và index |
+| `V2__seed_users_and_products.sql` | Seed 5 users và 50 products từ bộ dữ liệu chuẩn |
+| `V3__align_currency_columns_with_jpa.sql` | Chuẩn hóa kiểu currency thành `VARCHAR(3)` để Hibernate validate đúng |
+| `V4__seed_orderhub_reference_and_order_data.java` | Seed 20 customers, 200 orders, 576 order items và 137 shipments từ dữ liệu chuẩn |
+
+Schema được tạo theo quan hệ `users -> orders`, `customers -> orders`,
+`orders -> order_items`, `products -> order_items` và `orders -> shipments`.
+Các cột `customer_name`, `order_code`, `sku`, `product_name` và `unit_price`
+trong order history được giữ như snapshot tại thời điểm giao dịch; chúng không
+thay thế các foreign key chuẩn hóa.
+
+### Chạy PostgreSQL từ database sạch
+
+Yêu cầu Docker Desktop đang chạy:
+
+```powershell
+docker compose down -v
+docker compose up -d postgres
+docker compose ps
+```
+
+Khởi động ứng dụng sau khi container PostgreSQL đạt trạng thái `healthy`:
+
+```powershell
+$env:DB_URL="jdbc:postgresql://localhost:5432/orderhub"
+$env:DB_USERNAME="orderapp"
+$env:DB_PASSWORD="change-me"
+mvn spring-boot:run
+```
+
+Hoặc khởi động toàn bộ stack:
+
+```powershell
+docker compose up --build
+```
+
+Kiểm tra Flyway và dữ liệu seed bằng `psql`:
+
+```sql
+SELECT installed_rank, version, description, success
+FROM flyway_schema_history
+ORDER BY installed_rank;
+
+SELECT COUNT(*) AS user_count FROM dbo.users;
+SELECT COUNT(*) AS product_count FROM dbo.products;
+SELECT COUNT(*) AS inactive_product_count
+FROM dbo.products
+WHERE is_active = FALSE;
+```
+
+Kết quả mong đợi là `5` users, `20` customers, `50` products, `200` orders,
+`576` order items, `137` shipments và `3` products inactive. Lệnh
+`docker compose down -v` xóa volume để kiểm tra lại từ database hoàn toàn
+trống; khi chạy lần thứ hai trên cùng volume, Flyway không chạy lại migration
+đã thành công.
+
+`database/schema.sql` được giữ lại làm tài liệu schema SQL Server legacy. Schema
+chạy thực tế cho Day 7 là PostgreSQL và được quản lý duy nhất bởi Flyway;
+Hibernate chỉ kiểm tra bằng `ddl-auto=validate`, không tự tạo hoặc sửa bảng.
+
 ## Local configuration
 
 Copy `.env.example` into your local environment or configure the variables in
@@ -211,6 +278,20 @@ JSON logs. The same ID is forwarded to the pricing service through Feign.
 mvn test
 mvn -DskipTests package
 ```
+
+`mvn test` hiện kiểm tra metadata system endpoint, tính hợp lệ của bộ dữ liệu
+chuẩn (số lượng, khóa nghiệp vụ và quan hệ order/shipment), cùng hành vi
+`GET /orders` khi không truyền bộ lọc. Kiểm thử migration đầy đủ được thực hiện
+qua PostgreSQL Docker sạch:
+
+```powershell
+docker compose down -v
+docker compose up --build -d
+docker compose exec -T postgres psql -U orderapp -d orderhub `
+  -c "SELECT COUNT(*) FROM dbo.users; SELECT COUNT(*) FROM dbo.customers; SELECT COUNT(*) FROM dbo.products; SELECT COUNT(*) FROM dbo.orders; SELECT COUNT(*) FROM dbo.order_items; SELECT COUNT(*) FROM dbo.shipments;"
+```
+
+Các số lượng mong đợi lần lượt là `5`, `20`, `50`, `200`, `576` và `137`.
 
 ## Docker
 

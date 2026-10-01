@@ -1,4 +1,20 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-orderhub}
+      POSTGRES_USER: ${POSTGRES_USER:-orderapp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - orderhub-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-orderapp} -d ${POSTGRES_DB:-orderhub}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   order-service:
     build:
       context: .
@@ -8,10 +24,12 @@ services:
     environment:
       SERVER_PORT: 8080
       PRICING_SERVICE_URL: http://pricing-service:8081
-      DB_URL: ${DB_URL}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL:-jdbc:postgresql://postgres:5432/orderhub}
+      DB_USERNAME: ${DB_USERNAME:-orderapp}
+      DB_PASSWORD: ${DB_PASSWORD:-change-me}
     depends_on:
+      postgres:
+        condition: service_healthy
       pricing-service:
         condition: service_started
 
@@ -21,3 +39,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+
+volumes:
+  orderhub-postgres-data:

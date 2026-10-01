@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "OrderItems", schema = "dbo")
+@Table(name = "order_items", schema = "dbo")
 @IdClass(OrderItemId.class)
 public class Order_Item {
     @Id
