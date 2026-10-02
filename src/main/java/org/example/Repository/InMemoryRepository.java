@@ -1,6 +1,6 @@
 package org.example.Repository;
 
-import org.example.DTO.OrderDTO;
+import org.example.DTO.request.OrderDTO;
 import org.example.Entity.Order;
 import org.example.interfaces.IOrderRepository;
 

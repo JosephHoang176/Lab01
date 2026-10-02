@@ -1,7 +1,7 @@
 package org.example.Client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.DTO.ShipmentDTO;
+import org.example.DTO.request.ShipmentDTO;
 import org.example.Entity.Shipment;
 import org.example.Exceptions.ShippingTimeoutException;
 import org.example.Mapping.ShipmentMapper;

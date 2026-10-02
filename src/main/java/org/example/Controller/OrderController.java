@@ -1,8 +1,8 @@
 package org.example.Controller;
 
 import jakarta.validation.Valid;
-import org.example.DTO.DateRange;
-import org.example.DTO.OrderDTO;
+import org.example.DTO.request.DateRange;
+import org.example.DTO.request.OrderDTO;
 import org.example.Entity.Order;
 import org.example.Mapping.OrderMapper;
 import org.example.Service.OrderService;

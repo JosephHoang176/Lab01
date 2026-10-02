@@ -1,0 +1,51 @@
+package org.example.Controller;
+
+import jakarta.validation.Valid;
+import org.example.DTO.request.ProductDTO;
+import org.example.Entity.Product;
+import org.example.Mapping.ProductMapper;
+import org.example.Service.ProductService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping
+    public List<ProductDTO> getAllProducts() {
+        List<Product> products = productService.getAllProduct();
+        return products.stream().map(ProductMapper::toDto).toList();
+    }
+
+    @GetMapping("/{id}")
+    public ProductDTO getProductById(@PathVariable int id) {
+        Product product = productService.getProductById(id);
+        return ProductMapper.toDto(product);
+    }
+
+    @PostMapping
+    public boolean createProduct(@Valid @RequestBody ProductDTO dto) {
+        Product product = ProductMapper.toEntity(dto);
+        return productService.createProduct(product);
+    }
+
+    @PatchMapping("/{id}")
+    public boolean updateProduct(@PathVariable int id, @Valid @RequestBody ProductDTO dto) {
+        Product product = ProductMapper.toEntity(dto);
+        product.setId(id);
+        return productService.updateProduct(product);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteProductById(@PathVariable int id) {
+        return productService.deleteProductById(id);
+    }
+}

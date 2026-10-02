@@ -1,13 +1,46 @@
 package org.example.Entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "OrderItems")
+@IdClass(OrderItemId.class)
 public class Order_Item {
+    @Id
+    @Column(name = "order_id", nullable = false)
+    private int orderId;
+
+    @Id
+    @Column(name = "line_no", nullable = false)
     private int lineNo;
+
+    @Column(name = "product_id", nullable = false)
     private int productId;
+
+    @Column(name = "sku", nullable = false, length = 100)
     private String sku;
+
+    @Column(name = "product_name", nullable = false, length = 200)
     private String productName;
+
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @Column(name = "unit_price", nullable = false)
     private long unitPrice;
+
+    @Column(name = "line_total", nullable = false)
     private long lineTotal;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private Order order;
 
     public Order_Item() {
     }
@@ -21,6 +54,14 @@ public class Order_Item {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.lineTotal = lineTotal;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getLineNo() {
@@ -79,4 +120,11 @@ public class Order_Item {
         this.lineTotal = lineTotal;
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

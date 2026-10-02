@@ -2,6 +2,13 @@ spring:
   application:
     name: order-report-cli
 
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=OrderReportDb;encrypt=true;trustServerCertificate=true
+    username: orderapp
+    password: hoang123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+
   profiles:
     default: dev
 

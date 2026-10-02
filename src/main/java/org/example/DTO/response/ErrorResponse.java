@@ -1,4 +1,4 @@
-package org.example.DTO;
+package org.example.DTO.response;
 
 public record ErrorResponse (
         int status,

@@ -1,6 +1,6 @@
 package org.example.Mapping;
 
-import org.example.DTO.ShipmentDTO;
+import org.example.DTO.request.ShipmentDTO;
 import org.example.Entity.Shipment;
 
 public class ShipmentMapper {

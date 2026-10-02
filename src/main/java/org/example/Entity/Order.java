@@ -1,18 +1,27 @@
 package org.example.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import org.example.enums.OrderStatus;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
+@Table(name = "Orders")
 public class Order {
+
+    @Id
     private int id;
+
     private String code;
     private int customerId;
     private String customerName;
     private int createdBy;
     private OrderStatus status;
+    @OneToMany(mappedBy = "order")
     private List<Order_Item> lines = new ArrayList<>();
     private double subtotal;
     private double discountPercent;

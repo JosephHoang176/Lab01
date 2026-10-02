@@ -1,4 +1,4 @@
-package org.example.DTO;
+package org.example.DTO.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.Entity.Order_Item;

@@ -1,9 +1,16 @@
 package org.example.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.example.enums.User_Type;
 
+@Entity
+@Table(name = "Users")
 public class User {
+    @Id
     private int id;
+
     private String email;
     private String fullName;
     private User_Type role;

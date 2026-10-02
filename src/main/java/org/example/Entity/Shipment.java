@@ -1,11 +1,17 @@
 package org.example.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.example.enums.ShippingStatus;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "Shipments")
 public class Shipment {
+    @Id
     private int id;
     private int orderId;
     private String orderCode;

@@ -1,4 +1,4 @@
-package org.example.DTO;
+package org.example.DTO.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.example.enums.ShippingStatus;

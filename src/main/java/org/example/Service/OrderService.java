@@ -1,8 +1,6 @@
 package org.example.Service;
 
-import org.example.DTO.OrderDTO;
-import org.example.DTO.DateRange;
-import org.example.DTO.ShipmentDTO;
+import org.example.DTO.request.DateRange;
 import org.example.Entity.Order;
 import org.example.Entity.Shipment;
 import org.example.Exceptions.ShippingTimeoutException;

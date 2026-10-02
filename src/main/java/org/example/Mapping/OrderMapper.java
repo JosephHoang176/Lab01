@@ -1,6 +1,6 @@
 package org.example.Mapping;
 
-import org.example.DTO.OrderDTO;
+import org.example.DTO.request.OrderDTO;
 import org.example.Entity.Order;
 
 public class OrderMapper {
