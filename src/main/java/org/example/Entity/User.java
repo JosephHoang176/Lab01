@@ -1,8 +1,6 @@
 package org.example.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.example.enums.User_Type;
 
 @Entity
@@ -11,18 +9,29 @@ public class User {
     @Id
     private int id;
 
+    @Column(name = "email" ,nullable = false, unique = true)
     private String email;
+
+    @Column(name = "full_name", nullable = false)
     private String fullName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private User_Type role;
+
+    @Column(name = "password_hashed", nullable = false)
+    private String password;
 
     public User() {
     }
 
-    public User(int id, String email, String fullName, User_Type role) {
+    public User(int id, String email, String fullName, User_Type role, String password) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
         this.role = role;
+        this.password = password;
+
     }
 
     public int getId() {
@@ -56,4 +65,8 @@ public class User {
     public void setRole(User_Type role) {
         this.role = role;
     }
+
+    public String getPassword() {return password;}
+
+    public void setPassword(String password) {this.password = password;}
 }
