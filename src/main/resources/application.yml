@@ -8,6 +8,11 @@ spring:
     password: hoang123
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   flyway:
     enabled: true
     baseline-on-migrate: true

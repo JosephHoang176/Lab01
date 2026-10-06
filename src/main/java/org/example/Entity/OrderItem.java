@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "OrderItems")
 @IdClass(OrderItemId.class)
-public class Order_Item {
+public class OrderItem {
     @Id
     @Column(name = "order_id", nullable = false)
     private int orderId;
@@ -42,11 +42,11 @@ public class Order_Item {
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Order order;
 
-    public Order_Item() {
+    public OrderItem() {
     }
 
-    public Order_Item(int lineNo, int productId, String sku, String productName,
-                      int quantity, long unitPrice, long lineTotal) {
+    public OrderItem(int lineNo, int productId, String sku, String productName,
+                     int quantity, long unitPrice, long lineTotal) {
         this.lineNo = lineNo;
         this.productId = productId;
         this.sku = sku;

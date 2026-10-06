@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 public class UserController {
@@ -67,6 +68,7 @@ public class UserController {
     }
 
     @org.springframework.web.bind.annotation.GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ApiResponse<UserResponse> getMe(Authentication authentication) {
         UserResponse user = userService.findByEmail(authentication.getName());
         return new ApiResponse<>("Current user", "CURRENT_USER", user);

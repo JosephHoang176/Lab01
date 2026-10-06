@@ -3,12 +3,15 @@ package org.example.Service;
 import org.example.DTO.request.DateRange;
 import org.example.Entity.Order;
 import org.example.Entity.Shipment;
+import org.example.Entity.OrderItem;
+import org.example.Repository.ProductJPARepository;
 import org.example.Exceptions.ShippingTimeoutException;
 import org.example.enums.OrderStatus;
 import org.example.interfaces.IOrderCalculator;
 import org.example.interfaces.IOrderRepository;
 import org.example.interfaces.ShippingClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +26,18 @@ public class OrderService {
     private final IOrderCalculator calculator;
     private final IOrderRepository repository;
     private final ShippingClient shippingClient;
+    private final ProductJPARepository productRepository;
 
-    public OrderService(IOrderCalculator calculator, IOrderRepository repository, ShippingClient shippingClient) {
+    public OrderService(
+            IOrderCalculator calculator,
+            IOrderRepository repository,
+            ShippingClient shippingClient,
+            ProductJPARepository productRepository
+    ) {
         this.calculator = calculator;
         this.repository = repository;
         this.shippingClient = shippingClient;
+        this.productRepository = productRepository;
     }
 
     private boolean matchesStatus(Order order, OrderStatus status) {
@@ -128,6 +138,7 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
     public Order createOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException(
@@ -139,8 +150,30 @@ public class OrderService {
                     "Id khong hop le"
             );
         }
+        reserveProducts(order);
+        for (OrderItem line : order.getLines()) {
+            line.setOrderId(order.getId());
+            line.setOrder(order);
+        }
         if (order.getStatus() == null || order.getStatus() == OrderStatus.UNKNOWN) {order.setStatus(OrderStatus.DRAFT);}
         return repository.save(order);
+    }
+
+    private void reserveProducts(Order order) {
+        if (order.getLines() == null || order.getLines().isEmpty()) {
+            throw new IllegalArgumentException("Order phai co san pham");
+        }
+        for (OrderItem line : order.getLines()) {
+            if (line.getProductId() <= 0 || line.getQuantity() <= 0) {
+                throw new IllegalArgumentException("San pham va so luong khong hop le");
+            }
+            int updated = productRepository.reserveStock(line.getProductId(), line.getQuantity());
+            if (updated != 1) {
+                throw new IllegalStateException(
+                        "Khong du ton kho cho san pham " + line.getProductId()
+                );
+            }
+        }
     }
 
     public Order changeStatus(int orderId, OrderStatus newStatus) {

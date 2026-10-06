@@ -4,6 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import org.example.enums.OrderStatus;
 
 import java.time.OffsetDateTime;
@@ -20,9 +24,10 @@ public class Order {
     private int customerId;
     private String customerName;
     private int createdBy;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    @OneToMany(mappedBy = "order")
-    private List<Order_Item> lines = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderItem> lines = new ArrayList<>();
     private double subtotal;
     private double discountPercent;
     private double discountAmount;
@@ -45,7 +50,7 @@ public class Order {
                  String customerName,
                  int createdBy,
                  OrderStatus status,
-                 List<Order_Item> lines,
+                 List<OrderItem> lines,
                  double subtotal,
                  double discountPercent,
                  double discountAmount,
@@ -91,8 +96,8 @@ public class Order {
     public void setCreatedBy(int createdBy) { this.createdBy = createdBy; }
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
-    public List<Order_Item> getLines() { return lines; }
-    public void setLines(List<Order_Item> lines) {
+    public List<OrderItem> getLines() { return lines; }
+    public void setLines(List<OrderItem> lines) {
         this.lines = lines == null ? new ArrayList<>() : new ArrayList<>(lines);
     }
     public double getSubtotal() { return subtotal; }
