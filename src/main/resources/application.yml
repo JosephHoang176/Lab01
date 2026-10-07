@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=OrderReportDb;encrypt=true;trustServerCertificate=true
-    username: orderapp
-    password: hoang123
+    username: ${DB_USERNAME:orderapp}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   data:
@@ -21,12 +21,17 @@ spring:
   profiles:
     default: dev
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 server:
   port: 8080
 
 security:
   jwt:
-    secret: change-this-development-secret-to-a-strong-32-byte-value
+    secret: ${JWT_SECRET}
     access-token-minutes: 15
     refresh-token-days: 7
 
@@ -47,3 +52,18 @@ info:
     name: order-report-cli
     description: Mini Orders API
     version: 1.0-SNAPSHOT
+
+payment:
+  webhook:
+    secret: ${PAYMENT_WEBHOOK_SECRET:}
+  provider:
+    timeout-ms: ${PAYMENT_PROVIDER_TIMEOUT_MS:2000}
+    max-retries: ${PAYMENT_PROVIDER_MAX_RETRIES:3}
+    initial-backoff-ms: ${PAYMENT_PROVIDER_INITIAL_BACKOFF_MS:100}
+    max-backoff-ms: ${PAYMENT_PROVIDER_MAX_BACKOFF_MS:2000}
+  mock:
+    delay-ms: ${PAYMENT_MOCK_DELAY_MS:0}
+
+app:
+  invoice:
+    storage-dir: ${INVOICE_STORAGE_DIR:./data/invoices}

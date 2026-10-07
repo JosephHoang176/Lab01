@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/auth/**", "/webhooks/payment", "/actuator/health", "/actuator/info").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/products/**").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/products/**").hasRole("ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.PATCH, "/products/**").hasRole("ADMIN")

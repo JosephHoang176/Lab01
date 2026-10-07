@@ -8,6 +8,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Column;
 import org.example.enums.OrderStatus;
 
 import java.time.OffsetDateTime;
@@ -40,6 +41,8 @@ public class Order {
     private OffsetDateTime paidAt;
     private OffsetDateTime fulfilledAt;
     private OffsetDateTime cancelledAt;
+    @Column(name = "payment_reference", length = 200)
+    private String paymentReference;
 
     public Order() {
     }
@@ -124,4 +127,6 @@ public class Order {
     public void setFulfilledAt(OffsetDateTime fulfilledAt) { this.fulfilledAt = fulfilledAt; }
     public OffsetDateTime getCancelledAt() { return cancelledAt; }
     public void setCancelledAt(OffsetDateTime cancelledAt) { this.cancelledAt = cancelledAt; }
+    public String getPaymentReference() { return paymentReference; }
+    public void setPaymentReference(String paymentReference) { this.paymentReference = paymentReference; }
 }
