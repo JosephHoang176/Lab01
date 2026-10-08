@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,7 +62,24 @@ public class OrderService {
     }
 
     public List<Order> findFilteredOrders(OrderStatus status, DateRange dateRange) {
-        List<Order> orders = repository.getAllOrders();
+        OffsetDateTime fromInclusive = null;
+        OffsetDateTime toExclusive = null;
+        if (dateRange != null) {
+            ZoneId zone = ZoneId.systemDefault();
+            if (dateRange.fromDate() != null) {
+                fromInclusive = dateRange.fromDate().atStartOfDay(zone).toOffsetDateTime();
+            }
+            if (dateRange.toDate() != null) {
+                toExclusive = dateRange.toDate().plusDays(1).atStartOfDay(zone).toOffsetDateTime();
+            }
+        }
+
+        List<Order> orders = repository.findOrders(status, fromInclusive, toExclusive);
+        // Mockito-based and legacy adapters may not implement the optional
+        // optimized query; retain the existing repository contract for them.
+        if (orders == null) {
+            orders = repository.getAllOrders();
+        }
         if (orders == null || orders.isEmpty()) {
             return List.of();
         }

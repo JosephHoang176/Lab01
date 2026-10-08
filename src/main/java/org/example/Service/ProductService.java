@@ -2,21 +2,90 @@ package org.example.Service;
 
 import org.example.Entity.Product;
 import org.example.Repository.ProductJPARepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
 public class ProductService {
 
-    private final ProductJPARepository productRepository;
+    static final String ALL_PRODUCTS_CACHE_KEY = "products:all";
+    private static final Duration CACHE_TTL = Duration.ofMinutes(5);
 
+    private final ProductJPARepository productRepository;
+    private final StringRedisTemplate redisTemplate;
+    private final ObjectMapper objectMapper;
+
+    /**
+     * The one-argument constructor keeps this service usable by non-Spring callers.
+     * Spring uses the cache-enabled constructor.
+     */
     public ProductService(ProductJPARepository productRepository) {
+        this(productRepository, null, null);
+    }
+
+    @Autowired
+    public ProductService(ProductJPARepository productRepository,
+                          StringRedisTemplate redisTemplate,
+                          ObjectMapper objectMapper) {
         this.productRepository = productRepository;
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public List<Product> getAllProduct() {
-        return productRepository.findAll();
+        List<Product> cachedProducts = readCachedProducts();
+        if (cachedProducts != null) {
+            return cachedProducts;
+        }
+
+        List<Product> products = productRepository.findAll();
+        writeCachedProducts(products);
+        return products;
+    }
+
+    private List<Product> readCachedProducts() {
+        if (redisTemplate == null || objectMapper == null) {
+            return null;
+        }
+        try {
+            String cached = redisTemplate.opsForValue().get(ALL_PRODUCTS_CACHE_KEY);
+            if (cached == null || cached.isBlank()) {
+                return null;
+            }
+            return objectMapper.readValue(cached, new TypeReference<>() {});
+        } catch (Exception e) {
+            // Redis is an optimization; a cache outage must not make products unavailable.
+            return null;
+        }
+    }
+
+    private void writeCachedProducts(List<Product> products) {
+        if (redisTemplate == null || objectMapper == null) {
+            return;
+        }
+        try {
+            String serialized = objectMapper.writeValueAsString(products);
+            redisTemplate.opsForValue().set(ALL_PRODUCTS_CACHE_KEY, serialized, CACHE_TTL);
+        } catch (Exception ignored) {
+            // The database remains the source of truth when Redis cannot be written.
+        }
+    }
+
+    private void invalidateProductsCache() {
+        if (redisTemplate == null) {
+            return;
+        }
+        try {
+            redisTemplate.delete(ALL_PRODUCTS_CACHE_KEY);
+        } catch (RuntimeException ignored) {
+            // Cache invalidation is best effort and must not hide a successful write.
+        }
     }
 
     public Product getProductById(int id) {
@@ -34,6 +103,7 @@ public class ProductService {
             return false;
         }
         productRepository.save(product);
+        invalidateProductsCache();
         return true;
     }
 
@@ -43,6 +113,7 @@ public class ProductService {
             return false;
         }
         productRepository.save(product);
+        invalidateProductsCache();
         return true;
     }
 
@@ -51,6 +122,7 @@ public class ProductService {
             return false;
         }
         productRepository.deleteById(id);
+        invalidateProductsCache();
         return true;
     }
 

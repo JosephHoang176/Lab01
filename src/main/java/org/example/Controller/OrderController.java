@@ -31,7 +31,9 @@ public class OrderController {
             @Valid @RequestParam(required = false) LocalDate from,
             @Valid @RequestParam(required = false) LocalDate to
     ) {
-        OrderStatus orderStatus = OrderStatus.fromString(status);
+        OrderStatus orderStatus = status == null || status.isBlank()
+                ? null
+                : OrderStatus.fromString(status);
         DateRange dateRange = null;
         if (from != null || to != null) {
             dateRange = new DateRange(from, to);

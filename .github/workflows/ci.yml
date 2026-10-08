@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build
+        run: mvn -B -DskipTests package
+
+      - name: Lint and validate
+        run: mvn -B -DskipTests checkstyle:check
+
+      - name: Unit tests
+        run: mvn -B test
+
+      - name: Integration tests
+        run: mvn -B -DskipUnitTests=true verify
