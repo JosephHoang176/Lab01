@@ -1,0 +1,62 @@
+
+spring:
+  application:
+    name: ops-service
+
+  # Database configuration
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=${DB_NAME:OpsServiceDb};encrypt=true;trustServerCertificate=true
+    username: ${DB_USERNAME:orderapp}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  # JPA and Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    schemas: dbo
+    default-schema: dbo
+    locations: classpath:db/migration
+
+# Application port inside the container
+server:
+  port: 8082
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+
+  info:
+    env:
+      enabled: false
+
+# Application information
+info:
+  app:
+    name: ops-service
+    description: Independent Operations Microservice
+    version: 1.0.0-SNAPSHOT
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.example.opsservice: DEBUG
