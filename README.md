@@ -217,6 +217,41 @@ controller-level tests; SQL Server/Redis-backed tests remain a follow-up item.
 
 ## Runtime configuration
 
+### Day 14 RabbitMQ contract
+
+The Core API publishes a persistent JSON `order.paid` event after a payment
+webhook transaction commits. The event is sent to the durable topic exchange
+`orders.exchange` with routing key `order.paid`:
+
+```json
+{
+  "eventId": "payment-event-123",
+  "eventType": "order.paid",
+  "eventVersion": 1,
+  "occurredAt": "2026-10-12T14:00:00+07:00",
+  "orderId": 1001,
+  "customerId": 25,
+  "currency": "VND",
+  "amount": 1200000
+}
+```
+
+The Ops Service must bind its durable consumer queue to this exchange and
+routing key. It must acknowledge only after its report transaction commits,
+use `eventId` for idempotency, retry transient failures a finite number of
+times,
+and dead-letter permanent failures instead of requeueing them forever.
+
+Start the local RabbitMQ broker for Day 14 with:
+
+```powershell
+docker compose -f docker-compose.day14.yml up -d
+```
+
+RabbitMQ management is available at `http://localhost:15672`. The Core API
+uses `RABBITMQ_HOST`, `RABBITMQ_PORT`, `RABBITMQ_USERNAME` and
+`RABBITMQ_PASSWORD`; the defaults are intended only for local development.
+
 Redis defaults to:
 
 ```text

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "PaymentWebhookEvents",
+@Table(name = "`PaymentWebhookEvents`", schema = "dbo",
         uniqueConstraints = @UniqueConstraint(name = "UQ_PaymentWebhookEvents_EventId", columnNames = "event_id"))
 public class PaymentWebhookEvent {
     @Id

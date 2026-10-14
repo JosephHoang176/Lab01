@@ -2,11 +2,22 @@ spring:
   application:
     name: order-report-cli
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:}
+    password: ${RABBITMQ_PASSWORD:}
+
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=OrderReportDb;encrypt=true;trustServerCertificate=true
     username: ${DB_USERNAME:orderapp}
     password: ${DB_PASSWORD:}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.example.config.CorePhysicalNamingStrategy
 
   data:
     redis:
@@ -63,6 +74,11 @@ payment:
     max-backoff-ms: ${PAYMENT_PROVIDER_MAX_BACKOFF_MS:2000}
   mock:
     delay-ms: ${PAYMENT_MOCK_DELAY_MS:0}
+
+messaging:
+  orders:
+    exchange: ${ORDERS_EXCHANGE:orders.exchange}
+    paid-routing-key: ${ORDER_PAID_ROUTING_KEY:order.paid}
 
 app:
   invoice:

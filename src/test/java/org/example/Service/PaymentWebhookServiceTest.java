@@ -2,6 +2,7 @@ package org.example.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.Entity.Order;
+import org.example.Messaging.OrderPaidPublisher;
 import org.example.Repository.OrderJPARepository;
 import org.example.Repository.PaymentWebhookEventRepository;
 import org.example.enums.OrderStatus;
@@ -33,7 +34,7 @@ class PaymentWebhookServiceTest {
 
         String secret = "test-webhook-secret";
         PaymentWebhookService service = new PaymentWebhookService(
-                new ObjectMapper(), events, orders, secret);
+                new ObjectMapper(), events, orders, mock(OrderPaidPublisher.class), secret);
         byte[] payload = "{\"eventId\":\"evt_1\",\"orderId\":42,\"paymentId\":\"pay_42\",\"status\":\"succeeded\"}"
                 .getBytes(StandardCharsets.UTF_8);
         Mac mac = Mac.getInstance("HmacSHA256");

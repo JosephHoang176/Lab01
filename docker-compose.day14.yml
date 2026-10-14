@@ -1,0 +1,20 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    hostname: day14-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME:-day14}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-Day14Local_ChangeMe}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - day14-rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  day14-rabbitmq-data:

@@ -6,11 +6,14 @@ import org.example.Entity.Order;
 import org.example.Entity.PaymentWebhookEvent;
 import org.example.Repository.OrderJPARepository;
 import org.example.Repository.PaymentWebhookEventRepository;
+import org.example.Messaging.OrderPaidPublisher;
 import org.example.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -26,16 +29,19 @@ public class PaymentWebhookService {
     private final ObjectMapper objectMapper;
     private final PaymentWebhookEventRepository eventRepository;
     private final OrderJPARepository orderRepository;
+    private final OrderPaidPublisher orderPaidPublisher;
     private final String webhookSecret;
 
     public PaymentWebhookService(
             ObjectMapper objectMapper,
             PaymentWebhookEventRepository eventRepository,
             OrderJPARepository orderRepository,
+            OrderPaidPublisher orderPaidPublisher,
             @Value("${payment.webhook.secret:}") String webhookSecret) {
         this.objectMapper = objectMapper;
         this.eventRepository = eventRepository;
         this.orderRepository = orderRepository;
+        this.orderPaidPublisher = orderPaidPublisher;
         this.webhookSecret = webhookSecret == null ? "" : webhookSecret;
     }
 
@@ -88,7 +94,27 @@ public class PaymentWebhookService {
         if (changed == 0 && order.getStatus() != OrderStatus.PAID) {
             throw new IllegalStateException("Order is not awaiting payment");
         }
+        if (changed == 1) {
+            OffsetDateTime occurredAt = order.getPaidAt() == null
+                    ? OffsetDateTime.now()
+                    : order.getPaidAt();
+            publishAfterCommit(webhook.eventId().trim(), order, occurredAt);
+        }
         return new WebhookResult(webhook.eventId(), webhook.orderId(), changed == 1);
+    }
+
+    private void publishAfterCommit(String eventId, Order order, OffsetDateTime occurredAt) {
+        Runnable publish = () -> orderPaidPublisher.publish(eventId, order, occurredAt);
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    publish.run();
+                }
+            });
+        } else {
+            publish.run();
+        }
     }
 
     private void validatePaymentDetails(PaymentWebhookRequest webhook, Order order) {
